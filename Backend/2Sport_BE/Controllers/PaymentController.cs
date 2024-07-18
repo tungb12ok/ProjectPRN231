@@ -233,7 +233,7 @@ namespace _2Sport_BE.Controllers
                     {
                         ProductId = product.Id,
                         Product = product,
-                        Price = item.Price,
+                        Price = (int)item.Price,
                         Quantity = item.Quantity,
                     };
 

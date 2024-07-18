@@ -12,6 +12,6 @@ namespace _2Sport_BE.Repository.Models
 
         public virtual Blog? Blog { get; set; }
         public virtual Product? Product { get; set; }
-        public virtual User User { get; set; }
+        public virtual User? User { get; set; }
     }
 }

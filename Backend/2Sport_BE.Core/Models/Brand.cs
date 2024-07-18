@@ -12,8 +12,8 @@ namespace _2Sport_BE.Repository.Models
         }
 
         public int Id { get; set; }
-        public string BrandName { get; set; }
-        public string Logo { get; set; }
+        public string? BrandName { get; set; }
+        public string? Logo { get; set; }
         public int? Quantity { get; set; }
         public bool? Status { get; set; }
 

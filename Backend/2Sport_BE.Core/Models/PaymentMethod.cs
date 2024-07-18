@@ -11,7 +11,7 @@ namespace _2Sport_BE.Repository.Models
         }
 
         public int Id { get; set; }
-        public string PaymentMethodName { get; set; }
+        public string? PaymentMethodName { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
     }

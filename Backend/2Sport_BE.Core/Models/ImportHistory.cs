@@ -10,10 +10,10 @@ namespace _2Sport_BE.Repository.Models
         public DateTime? ImportDate { get; set; }
         public int? Quantity { get; set; }
         public int? SupplierId { get; set; }
-        public string LotCode { get; set; }
-        public string ImportCode { get; set; }
+        public string? LotCode { get; set; }
+        public string? ImportCode { get; set; }
 
-        public virtual Product Product { get; set; }
-        public virtual Supplier Supplier { get; set; }
+        public virtual Product? Product { get; set; }
+        public virtual Supplier? Supplier { get; set; }
     }
 }

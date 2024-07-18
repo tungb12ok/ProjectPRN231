@@ -1,0 +1,18 @@
+.parallax .scroller {
+    display: flex;
+    flex-wrap: nowrap; 
+  }
+  
+  .parallax span {
+    flex: 0 0 auto; 
+  }
+  .progress-bar {
+    position: fixed;
+    top: auto;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: #1dca42;
+    transform-origin: 0%;
+  }
+  
