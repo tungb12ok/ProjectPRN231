@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace _2Sport_BE.Service.Dtos
+{
+    public class UserOrderDto
+    {
+        public int OrderId { get; set; }
+        public List<ProductInOrderDto> Products { get; set; }
+        public decimal? TotalPrice { get; set; }
+        public DateTime OrderDate { get; set; }
+    }
+}

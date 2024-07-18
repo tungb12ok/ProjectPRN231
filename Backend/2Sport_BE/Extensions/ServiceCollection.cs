@@ -37,6 +37,8 @@ namespace _2Sport_BE.Extensions
 			services.AddScoped<ISupplierService, SupplierService>();
 			services.AddScoped<IImportHistoryService, ImportHistoryService>();
 			services.AddScoped<IWarehouseService, WarehouseService>();
+			services.AddScoped<IDashboardService, DashboardService>();
+			services.AddScoped<IUserOrderService, UserOrderService>();
         }
 
         private static string GetConnectionStrings()

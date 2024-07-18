@@ -20,16 +20,19 @@ namespace _2Sport_BE.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IUserOrderService _userOrderService;
         private readonly IMapper _mapper;
         private readonly IRefreshTokenService _refreshTokenService;
         public UserController(
             IUserService userService,
+              IUserOrderService userOrderService,
             IMapper mapper,
             IRefreshTokenService refreshTokenService
             )
         {
             _userService = userService;
             _mapper = mapper;
+            _userOrderService = userOrderService;
             _refreshTokenService = refreshTokenService;
         }
         [HttpGet]
@@ -73,7 +76,19 @@ namespace _2Sport_BE.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [HttpGet("UserOrderd")]
+        public IActionResult getUserOrderd(int userId)
+        {
+            try
+            {
+                var order = _userOrderService.GetUserOrders(userId);
+                return Ok(order);
+            }
+            catch(Exception ex) {
+                return BadRequest(ex.Message);
+            }
+            
+        }
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetUserDetail(int userId)
         {
