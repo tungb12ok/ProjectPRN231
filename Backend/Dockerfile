@@ -1,34 +1,35 @@
-# Use the ASP.NET Core runtime image as the base image for the final stage
+# Base image for the runtime
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
+EXPOSE 443
 
-# Use the .NET SDK image for the build stage
+ENV ASPNETCORE_ENVIRONMENT=Development
+ENV ASPNETCORE_URLS=https://+:443;http://+:80
+
+# Build image
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 
-# Copy the project files and restore dependencies
+# Copy and restore project files
 COPY ["2Sport_BE/2Sport_BE.csproj", "2Sport_BE/"]
 COPY ["2Sport_BE.Core/2Sport_BE.Core.csproj", "2Sport_BE.Core/"]
 COPY ["2Sport_BE.Infrastructure/2Sport_BE.Infrastructure.csproj", "2Sport_BE.Infrastructure/"]
 RUN dotnet restore "2Sport_BE/2Sport_BE.csproj"
 
-# Copy the rest of the source code
+# Copy the rest of the source code and build
 COPY . .
+WORKDIR "/src/2Sport_BE"
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet build "2Sport_BE.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# Build the main project
-WORKDIR /src/2Sport_BE
-RUN dotnet build "2Sport_BE.csproj" -c Release -o /app/build
-
-# Publish the main project
+# Publish the application
 FROM build AS publish
-RUN dotnet publish "2Sport_BE.csproj" -c Release -o /app/publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "2Sport_BE.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# Final stage: set up the runtime environment
+# Final stage - runtime image
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "2Sport_BE.dll"]
-
-
-

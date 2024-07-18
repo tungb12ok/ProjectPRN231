@@ -14,7 +14,7 @@ namespace _2Sport_BE.Helpers
             CreateMap<UserCM, User>();
             CreateMap<UserUM, User>();
             #endregion
-
+            
             #region Sport
             CreateMap<Sport, SportVM>();
             CreateMap<Sport, SportCM>();
