@@ -21,7 +21,7 @@ builder.Services.AddTransient<ISendMailService, _2Sport_BE.Services.MailService>
 builder.Services.Register();
 // Add services to the container.
 builder.Services.AddControllers().AddJsonOptions(x =>
-   x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
+    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 //Setting PayOs
 builder.Services.Configure<PayOSSettings>(builder.Configuration.GetSection("PayOSSettings"));
 //JWT services
@@ -48,20 +48,20 @@ builder.Services.AddAuthentication(options =>
     })
     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
     {
-    options.RequireHttpsMetadata = false;
-    options.SaveToken = true;
-    options.TokenValidationParameters = tokenValidationParameters;
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+        options.TokenValidationParameters = tokenValidationParameters;
     })
-   .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
-   .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
-   {
-       options.ClientId = builder.Configuration["Auth0:ClientId"];
-       options.ClientSecret = builder.Configuration["Auth0:ClientSecret"];
-       options.Scope.Add(builder.Configuration["Auth0:ProfileAccess"]);
-       options.Scope.Add(builder.Configuration["Auth0:EmailAccess"]);
-       options.Scope.Add(builder.Configuration["Auth0:BirthDayAccess"]);
-       options.Scope.Add(builder.Configuration["Auth0:PhoneAccess"]);
-   });
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+    {
+        options.ClientId = builder.Configuration["Auth0:ClientId"];
+        options.ClientSecret = builder.Configuration["Auth0:ClientSecret"];
+        options.Scope.Add(builder.Configuration["Auth0:ProfileAccess"]);
+        options.Scope.Add(builder.Configuration["Auth0:EmailAccess"]);
+        options.Scope.Add(builder.Configuration["Auth0:BirthDayAccess"]);
+        options.Scope.Add(builder.Configuration["Auth0:PhoneAccess"]);
+    });
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
@@ -87,23 +87,24 @@ builder.Services.AddSwaggerGen(c =>
                     Id = "Bearer"
                 }
             },
-            new string[] {}
+            new string[] { }
         }
     });
 });
-builder.Services.AddCors(options =>
+builder.Services.AddCors(opt =>
 {
-    options.AddPolicy("CorsPolicy", builder =>
-    builder.WithOrigins("*")
+    opt.AddPolicy("CorsPolicy", builder =>
+    {
+        builder
+            .WithOrigins("157.66.24.101:80")
             .AllowAnyMethod()
             .AllowAnyHeader()
-         );
+            .AllowCredentials()
+            .SetIsOriginAllowed((host) => true);
+    });
 });
 //Mapping services
-var mappingConfig = new MapperConfiguration(mc =>
-{
-    mc.AddProfile(new Mapping());
-});
+var mappingConfig = new MapperConfiguration(mc => { mc.AddProfile(new Mapping()); });
 IMapper mapper = mappingConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
@@ -125,9 +126,6 @@ app.UseCors("CorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseStaticFiles();
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
+app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
 app.Run();
