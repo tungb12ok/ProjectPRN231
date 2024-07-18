@@ -17,6 +17,7 @@ using System.Configuration;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("AppSettings:MailSettings"));
 builder.Services.AddTransient<ISendMailService, _2Sport_BE.Services.MailService>();
+builder.Services.AddHttpClient();
 
 builder.Services.Register();
 // Add services to the container.

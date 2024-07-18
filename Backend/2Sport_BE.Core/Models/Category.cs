@@ -12,7 +12,7 @@ namespace _2Sport_BE.Repository.Models
         }
 
         public int Id { get; set; }
-        public string CategoryName { get; set; }
+        public string? CategoryName { get; set; }
         public int? Quantity { get; set; }
         public bool? Status { get; set; }
 

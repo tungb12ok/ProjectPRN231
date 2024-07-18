@@ -291,21 +291,26 @@ namespace _2Sport_BE.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("add-product-list")]
-        public async Task<IActionResult> AddProductList(List<ProductCM> productList)
+
+        [HttpPost("add-product-list")]
+        public async Task<IActionResult> AddProductList([FromBody] List<ProductCM> productList)
         {
+            if (productList == null || !productList.Any())
+            {
+                return BadRequest("Product list cannot be null or empty.");
+            }
+
             try
             {
                 var addedProducts = _mapper.Map<List<Product>>(productList);
-				await _productService.AddProducts(addedProducts);
+                await _productService.AddProducts(addedProducts);
                 return Ok("Add products successfully!");
-                
-			} catch (Exception e)
-            {
-                return BadRequest(e);
             }
-            
+            catch (Exception e)
+            {
+                // Log the exception (consider using a logging framework like Serilog)
+                return BadRequest(new { message = "An error occurred while adding products.", error = e.Message });
+            }
         }
 
         [HttpDelete]
