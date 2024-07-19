@@ -191,7 +191,7 @@ namespace _2Sport_BE.Controllers
                     window.opener.postMessage({{
                         token: '{token}',
                         refreshToken: '{refreshToken}'
-                    }}, 'http://localhost:5173');
+                    }}, 'http://localhost:5000');
                     window.close();
                 </script>";
 

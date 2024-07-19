@@ -28,6 +28,7 @@ namespace _2Sport_BE.Service.Services
         Task AddProducts(IEnumerable<Product> products);
         Task DeleteProductById(int id);
         Task UpdateProduct(Product newProduct);
+        Task AddProduct(Product addedProducts);
     }
     public class ProductService : IProductService
     {
@@ -93,6 +94,11 @@ namespace _2Sport_BE.Service.Services
         public async Task UpdateProduct(Product newProduct)
         {
             await _unitOfWork.ProductRepository.UpdateAsync(newProduct);
+        }
+
+        public async Task AddProduct(Product addedProducts)
+        {
+            await _unitOfWork.ProductRepository.InsertAsync(addedProducts);
         }
     }
 }
