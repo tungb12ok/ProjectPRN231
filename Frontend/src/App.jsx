@@ -23,6 +23,7 @@ import ManageUser from './components/Admin/ManageUser';
 import ContactUs from './pages/ContactUs';
 import AboutUs from './pages/AboutUs';
 import ProductManagement from './components/Staff/ProductManagement ';
+import OrderManagement from './components/Staff/OrderManagement';
 
 function App() {
   const user = useSelector(selectUser)
@@ -30,6 +31,7 @@ function App() {
     <>
       <Routes>
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/manage-order" element={<OrderManagement />} />
         <Route path="/product-management" element={<ProductManagement />} />
         <Route path="/manage-user" element={<ManageUser />} />
         <Route path="*" element={<>
