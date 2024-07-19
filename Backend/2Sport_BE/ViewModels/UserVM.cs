@@ -22,6 +22,7 @@ namespace _2Sport_BE.ViewModels
         public DateTime? BirthDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? LastUpdate { get; set; }
+        public bool? IsActive { get; set; } 
 
     }
     public class UserCM : UserDTO
