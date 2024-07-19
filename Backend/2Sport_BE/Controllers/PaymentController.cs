@@ -53,7 +53,7 @@ namespace _2Sport_BE.Controllers
             _unitOfWork = unitOfWork;
         }
         [HttpPost("checkout-orders")]
-        public async Task<IActionResult> CreatePayOsLink([FromBody] OrderCM orderCM, int orderMethodId)
+        public async Task<IActionResult> CreatePayOsLink([FromBody] OrderCM orderCM, int orderMethodId, string description)
         {
             if (!ModelState.IsValid)
             {
@@ -73,16 +73,16 @@ namespace _2Sport_BE.Controllers
             }
 
             Order order = null;
-            if (orderMethodId == (int)OrderMethods.PayOS || orderMethodId == (int)OrderMethods.COD)
+            if (orderMethodId == (int)OrderMethods.VietQR || orderMethodId == (int)OrderMethods.COD)
             {
-                order = await CreateOrder(orderCM, orderMethodId);
+                order = await CreateOrder(orderCM, orderMethodId, description);
                 if (order == null)
                 {
                     return StatusCode(500, "Order creation failed.");
                 }
 
-                var paymentLink = orderMethodId == (int)OrderMethods.PayOS
-                                  ? await _paymentService.PaymentWithPayOs(order.Id)
+                var paymentLink = orderMethodId == (int)OrderMethods.VietQR
+                                  ? await _paymentService.PaymentWithVietQR(order.Id)
                                   : null;
 
                 var check = await DeleteCartItem(user.Id, orderCM.OrderDetails);
@@ -190,7 +190,7 @@ namespace _2Sport_BE.Controllers
             return user.FirstOrDefault();
         }
         [NonAction]
-        protected async Task<Order> CreateOrder(OrderCM orderCM, int paymentMethodId)
+        protected async Task<Order> CreateOrder(OrderCM orderCM, int paymentMethodId, string description)
         {
             // Lấy thông tin người dùng từ token
             var user = await GetUserFromToken();
@@ -218,6 +218,7 @@ namespace _2Sport_BE.Controllers
                 ReceivedDate = orderCM.ReceivedDate,
                 UserId = GetCurrentUserIdFromToken(),
                 User = user,
+                Description = description,
                 OrderDetails = new List<OrderDetail>()
             };
 
@@ -264,15 +265,23 @@ namespace _2Sport_BE.Controllers
                 foreach (var orderDetail in orderDetails)
                 {
                     var cartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == orderDetail.ProductId && ci.Status == true);
-                    var wareHouse =(Warehouse) await _warehouseService.GetWarehouseByProductId(orderDetail.ProductId);
+
+                    var warehouses = await _warehouseService.GetWarehouseByProductId(orderDetail.ProductId);
+                    var warehouse = warehouses.FirstOrDefault();
+
+                    if (warehouse == null)
+                    {
+                        return false;
+                    }
+
                     if (cartItem != null)
                     {
                         if (cartItem.Quantity > orderDetail.Quantity)
                         {
                             var quantity = cartItem.Quantity - orderDetail.Quantity;
                             await _cartItemService.UpdateQuantityOfCartItem(cartItem.Id, (int)quantity);
-                            wareHouse.Quantity = wareHouse.Quantity - orderDetail.Quantity;
-                            await _warehouseService.UpdateWarehouseAsync(wareHouse);
+                            warehouse.Quantity = warehouse.Quantity - orderDetail.Quantity;
+                            await _warehouseService.UpdateWarehouseAsync(warehouse);
                             _unitOfWork.Save();
                         }
                         else if (cartItem.Quantity < orderDetail.Quantity)
@@ -283,7 +292,6 @@ namespace _2Sport_BE.Controllers
                         {
                             await _cartItemService.DeleteCartItem(cartItem.Id);
                         }
-
                     }
                     else
                     {
@@ -294,6 +302,7 @@ namespace _2Sport_BE.Controllers
             }
             return false;
         }
+
 
     }
 }

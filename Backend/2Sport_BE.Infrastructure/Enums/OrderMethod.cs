@@ -10,6 +10,7 @@ namespace _2Sport_BE.Service.Enums
     {
         COD = 1,
         PayOS = 2,
-        VnPay = 3
+        VnPay = 3, 
+        VietQR = 4,
     }
 }

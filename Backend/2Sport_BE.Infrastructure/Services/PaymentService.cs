@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 using Net.payOS;
 using Net.payOS.Types;
+using static System.Net.WebRequestMethods;
 
 namespace _2Sport_BE.Service.Services
 {
@@ -24,6 +25,7 @@ namespace _2Sport_BE.Service.Services
         Task PaymentWithVnPay(int orderId);
         Task<PaymentLinkInformation> CancelPaymentLink(int orderId, string reason);
         Task<PaymentLinkInformation> GetPaymentLinkInformationAsync(int orderId);
+        Task<string> PaymentWithVietQR(int id);
     }
     public class PaymentService : IPaymentService
     {
@@ -98,5 +100,17 @@ namespace _2Sport_BE.Service.Services
 
             return paymentLinkInformation;
         }
+
+        public async Task<string> PaymentWithVietQR(int id)
+        {
+            var order = await _orderService.GetOrderByIdAsync(id);
+            if (order == null)
+            {
+                throw new ArgumentException("Invalid order ID.");
+            }
+            string urlLink = $"https://img.vietqr.io/image/TPB-0972074620-compact2.jpg?amount={order.TotalPrice}&addInfo={order.Description}";
+            return urlLink;
+        }
+
     }
 }
