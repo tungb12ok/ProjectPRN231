@@ -45,7 +45,7 @@ namespace _2Sport_BE.Repository.Models
             if (!optionsBuilder.IsConfigured)
             {
                 var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-                string ConnectionStr = config.GetConnectionString("DB");
+                string ConnectionStr = config.GetConnectionString("DefaultConnection");
 
                 optionsBuilder.UseSqlServer(ConnectionStr);
             }
@@ -249,6 +249,8 @@ namespace _2Sport_BE.Repository.Models
             {
                 entity.HasIndex(e => e.Id, "UQ__OrderDet__3214EC06C9AC78D7")
                     .IsUnique();
+
+                entity.Property(e => e.Price).HasColumnType("decimal(18, 0)");
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderDetails)
