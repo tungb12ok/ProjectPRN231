@@ -19,9 +19,11 @@ export const getProductList = (sortBy = '') => {
   });
 };
 
-export const getProductListPagination = ({ page = 1, perPage = 10, sortBy = '', isAscending = true }) => {
+export const getProductListPagination = ({ currentPage = 1, perPage = 5, sortBy = '', isAscending = true }) => {
   const url = `${API_BASE_URL}/list-products`;
-  const params = { page, perPage, sortBy, isAscending };
+  const params = { currentPage, perPage, isAscending };
+  console.log("params: ", params); // Debugging line to check the params
+  console.log("log API URL", url);
   return axios.get(url, {
     params,
     headers: {
@@ -29,7 +31,6 @@ export const getProductListPagination = ({ page = 1, perPage = 10, sortBy = '', 
     }
   });
 };
-
 
 export const getProductById = (id) => {
   const url = `${API_BASE_URL}/get-product/${id}`;
@@ -67,4 +68,52 @@ export const addProduct = (product) => {
       'Content-Type': 'application/json'
     }
   });
+};
+
+// Fetch list of sports
+export const getSportList = async (token) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/sport/list-sports`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'accept': '*/*',
+      },
+    });
+    return response.data.data.$values;
+  } catch (error) {
+    console.error('Error fetching sports:', error);
+    throw error;
+  }
+};
+
+// Fetch list of categories
+export const getCategoryList = async (token) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/Category/list-categories`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'accept': '*/*',
+      },
+    });
+    return response.data.data.$values;
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    throw error;
+  }
+};
+
+// Fetch list of brands
+export const getBrandList = async (token) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/Brand/list-all`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'accept': '*/*',
+      },
+    });
+    return response.data.data.$values;
+  } catch (error) {
+    console.error('Error fetching brands:', error);
+    throw error;
+  }
 };

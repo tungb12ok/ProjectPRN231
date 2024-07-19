@@ -31,6 +31,7 @@ function App() {
       <Routes>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/product-management" element={<ProductManagement />} />
+        <Route path="/manage-user" element={<ManageUser />} />
         <Route path="*" element={<>
           <Header />
           <div className="pt-28">
@@ -44,7 +45,6 @@ function App() {
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/shipment" element={<UserShipment />} />
               <Route path="*" element={<NotFoundPage />} />
-              <Route path="/manage-user" element={<ManageUser />} />
               <Route path="/contact-us" element={<ContactUs />} />
               <Route path="/about-us" element={<AboutUs />} />
             </Routes>

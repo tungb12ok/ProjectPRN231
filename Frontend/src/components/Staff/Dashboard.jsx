@@ -66,8 +66,10 @@ export default function Dashboard() {
     <>
       <HeaderStaff />
       <div className="flex">
-        <SidebarStaff />
-        <div className="flex-grow p-4">
+        <div className="w-2/12">
+          <SidebarStaff />
+        </div>
+        <div className="flex-grow p-4 w-10/12">
           <h2 className="text-2xl font-bold mx-10 mt-4">Dashboard</h2>
           <div className="flex justify-between items-center mx-10 my-4">
             <Breadcrumbs className="flex-grow">
@@ -265,13 +267,12 @@ export default function Dashboard() {
                         <td className={classes}>
                           <div className="flex items-center">
                             <span
-                              className={`inline-block w-2 h-2 mr-2 rounded-full ${
-                                order.status === "Order Confirmation"
+                              className={`inline-block w-2 h-2 mr-2 rounded-full ${order.status === "Order Confirmation"
                                   ? "bg-green-500"
                                   : order.status === "Canceled"
-                                  ? "bg-red-500"
-                                  : "bg-gray-500"
-                              }`}
+                                    ? "bg-red-500"
+                                    : "bg-gray-500"
+                                }`}
                             ></span>
                             <Typography
                               variant="small"

@@ -1,7 +1,14 @@
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 
-function Pagination({ total, current, onChange }) {
-  const totalPages = Math.ceil(total / 10); 
+function Pagination({ total, current, onChange, perPage }) {
+  const totalPages = total;
+
+  useEffect(() => {
+    console.log("Total Pages:", totalPages);
+    console.log("Current Page:", current);
+  }, [totalPages, current]);
+
   const getPageNumbers = () => {
     const pageNumbers = [];
     if (totalPages <= 5) {
@@ -121,6 +128,7 @@ Pagination.propTypes = {
   total: PropTypes.number.isRequired,
   current: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
+  perPage: PropTypes.number.isRequired,
 };
 
 export default Pagination;

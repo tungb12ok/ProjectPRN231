@@ -4,23 +4,28 @@ import SidebarStaff from "./SidebarStaff";
 import ProductTable from "../Product/ProductTable";
 import AddProductModal from "../Product/AddProductModal";
 import Pagination from "../../components/Product/Pagination";
-import { getProductList } from "../../api/apiProduct";
+import { getProductListPagination } from "../../api/apiProduct";
+import { toast } from "react-toastify";
 
 const ProductManagement = () => {
     const [products, setProducts] = useState([]);
     const [totalProducts, setTotalProducts] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [sortBy, setSortBy] = useState('');
+    const [isAscending, setIsAscending] = useState(true);
+    const perPage = 5;
 
     useEffect(() => {
-        fetchProducts(currentPage);
-    }, [currentPage]);
+        fetchProducts(currentPage, sortBy, isAscending);
+    }, [currentPage, sortBy, isAscending]);
 
-    const fetchProducts = async (page) => {
+    const fetchProducts = async () => {
         try {
-            const response = await getProductList({ currentPage: page });
+            const response = await getProductListPagination({ currentPage, perPage, sortBy, isAscending });
             setProducts(response.data.data.$values);
             setTotalProducts(response.data.total);
+            toast.success("Go to page "+currentPage)
         } catch (error) {
             console.error("Error fetching products", error);
         }
@@ -38,20 +43,27 @@ const ProductManagement = () => {
         setCurrentPage(page);
     };
 
+    const handleSortChange = (sortKey) => {
+        setSortBy(sortKey);
+        setIsAscending(!isAscending);
+    };
+
     return (
         <div className="flex h-screen bg-gray-100">
-            <HeaderStaff />
-            <SidebarStaff className="w-2/12 h-full fixed" />
-            <div className="flex flex-col w-10/12 ml-fixed">
+            <div className="w-2/12 h-full fixed">
+                <SidebarStaff />
+            </div>
+            <div className="flex flex-col w-10/12 ml-auto">
+                <HeaderStaff />
                 <main className="flex-1 p-2 mt-16 ml-3">
                     <h1 className="text-2xl font-bold mb-4">Product Management</h1>
                     <button onClick={openModal} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out mb-4">
                         Add Product
                     </button>
                     <div className="overflow-auto bg-white shadow-md rounded p-2">
-                        <ProductTable products={products} setProducts={setProducts} fetchProducts={fetchProducts} />
+                        <ProductTable products={products} setProducts={setProducts} fetchProducts={fetchProducts} handleSortChange={handleSortChange} />
                     </div>
-                    <Pagination total={totalProducts} current={currentPage} onChange={handlePageChange} />
+                    <Pagination total={totalProducts} current={currentPage} onChange={handlePageChange} perPage={perPage} />
                     {isModalOpen && <AddProductModal closeModal={closeModal} handleAddProduct={handleAddProduct} />}
                 </main>
             </div>

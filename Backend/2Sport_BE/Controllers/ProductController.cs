@@ -69,34 +69,46 @@ namespace _2Sport_BE.Controllers
         {
             try
             {
-                var query = await _productService.GetProducts(_ => _.Status == true, null, "", defaultSearch.currentPage, defaultSearch.perPage);
+                var query = await _productService.GetProducts(
+                    _ => _.Status == true, 
+                    null, 
+                    "", 
+                    defaultSearch.currentPage, 
+                    defaultSearch.perPage
+                );
+        
                 var products = query.ToList();
-                foreach(var product in products)
+        
+                foreach (var product in products)
                 {
                     var brand = await _brandService.GetBrandById(product.BrandId);
                     product.Brand = brand.FirstOrDefault();
                     var category = await _categoryService.GetCategoryById(product.CategoryId);
                     product.Category = category;
-					var sport = await _sportService.GetSportById(product.SportId);
-					product.Sport = sport;
+                    var sport = await _sportService.GetSportById(product.SportId);
+                    product.Sport = sport;
                     var classification = await _unitOfWork.ClassificationRepository.FindAsync(product.ClassificationId);
                     product.Classification = classification;
                 }
+        
                 var result = products.Select(_ => _mapper.Map<Product, ProductVM>(_)).ToList();
+        
                 foreach (var product in result)
                 {
-					var reviews = await _reviewService.GetReviewsOfProduct(product.Id);
-					product.Reviews = reviews.ToList();
-					var numOfLikes = await _likeService.CountLikeOfProduct(product.Id);
+                    var reviews = await _reviewService.GetReviewsOfProduct(product.Id);
+                    product.Reviews = reviews.ToList();
+                    var numOfLikes = await _likeService.CountLikeOfProduct(product.Id);
                     product.Likes = numOfLikes;
                 }
-                return Ok(new { total = result.Count, data = result });
+        
+                return Ok(new { total = products.Count(), data = result });
             }
             catch (Exception ex)
             {
                 return BadRequest(ex);
             }
         }
+
 
         [HttpGet]
         [Route("filter-sort-products")]
@@ -291,26 +303,21 @@ namespace _2Sport_BE.Controllers
             }
         }
 
-
-        [HttpPost("add-product-list")]
-        public async Task<IActionResult> AddProductList([FromBody] List<ProductCM> productList)
+        [HttpPost]
+        [Route("add-product-list")]
+        public async Task<IActionResult> AddProductList(ProductCM productList)
         {
-            if (productList == null || !productList.Any())
-            {
-                return BadRequest("Product list cannot be null or empty.");
-            }
-
             try
             {
-                var addedProducts = _mapper.Map<List<Product>>(productList);
-                await _productService.AddProducts(addedProducts);
+                var addedProducts = _mapper.Map<Product>(productList);
+				await _productService.AddProduct(addedProducts);
                 return Ok("Add products successfully!");
-            }
-            catch (Exception e)
+                
+			} catch (Exception e)
             {
-                // Log the exception (consider using a logging framework like Serilog)
-                return BadRequest(new { message = "An error occurred while adding products.", error = e.Message });
+                return BadRequest(e);
             }
+            
         }
 
         [HttpDelete]

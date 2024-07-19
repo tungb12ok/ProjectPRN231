@@ -111,11 +111,10 @@ export default function UserDropdown() {
                 <motion.li
                     variants={itemVariants}
                     className="bg-white p-3 text-black"
-                // onClick={handleLogout}
+                onClick={handleLogout}
                 >
 
-                    {/* <button><FontAwesomeIcon className="" icon={faRightFromBracket} /> Logout</button> */}
-                    <Logout />
+                    <button><FontAwesomeIcon className="" icon={faRightFromBracket} /> Logout</button>
                 </motion.li>
             </motion.ul>
         </motion.nav>
