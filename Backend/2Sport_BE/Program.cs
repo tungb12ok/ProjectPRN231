@@ -15,17 +15,23 @@ using _2Sport_BE.Service.Services;
 using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Cấu hình MailSettings
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("AppSettings:MailSettings"));
 builder.Services.AddTransient<ISendMailService, _2Sport_BE.Services.MailService>();
 builder.Services.AddHttpClient();
 
+// Đăng ký dịch vụ
 builder.Services.Register();
-// Add services to the container.
+
+// Cấu hình Controllers
 builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
-//Setting PayOs
+
+// Cấu hình PayOS
 builder.Services.Configure<PayOSSettings>(builder.Configuration.GetSection("PayOSSettings"));
-//JWT services
+
+// Cấu hình JWT
 var appsettingSection = builder.Configuration.GetSection("ServiceConfiguration");
 builder.Services.Configure<ServiceConfiguration>(appsettingSection);
 var serviceConfiguration = appsettingSection.Get<ServiceConfiguration>();
@@ -42,27 +48,18 @@ var tokenValidationParameters = new TokenValidationParameters
 
 builder.Services.AddSingleton(tokenValidationParameters);
 builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-    {
-        options.RequireHttpsMetadata = false;
-        options.SaveToken = true;
-        options.TokenValidationParameters = tokenValidationParameters;
-    })
-    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
-    {
-        options.ClientId = builder.Configuration["Auth0:ClientId"];
-        options.ClientSecret = builder.Configuration["Auth0:ClientSecret"];
-        options.Scope.Add(builder.Configuration["Auth0:ProfileAccess"]);
-        options.Scope.Add(builder.Configuration["Auth0:EmailAccess"]);
-        options.Scope.Add(builder.Configuration["Auth0:BirthDayAccess"]);
-        options.Scope.Add(builder.Configuration["Auth0:PhoneAccess"]);
-    });
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = tokenValidationParameters;
+});
+
+// Cấu hình Swagger
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
@@ -92,38 +89,33 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+
+// Cấu hình CORS
 builder.Services.AddCors(opt =>
 {
     opt.AddPolicy("CorsPolicy", builder =>
     {
-        builder
-            .WithOrigins("157.66.24.101:80")
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials()
-            .SetIsOriginAllowed((host) => true);
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
     });
 });
-//Mapping services
+
+// Cấu hình AutoMapper
 var mappingConfig = new MapperConfiguration(mc => { mc.AddProfile(new Mapping()); });
 IMapper mapper = mappingConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-
+// Cấu hình middleware
+app.UseCors("CorsPolicy");
 app.UseSwagger();
 app.UseSwaggerUI();
-
 app.UseHttpsRedirection();
 app.UseRouting();
-app.UseCors("CorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseStaticFiles();

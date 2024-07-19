@@ -77,8 +77,10 @@ namespace _2Sport_BE.Controllers
             }
         }
         [HttpGet("UserOrderd")]
-        public IActionResult getUserOrderd(int userId)
+        [Authorize]
+        public IActionResult getUserOrderd()
         {
+            int userId = GetCurrentUserIdFromToken();
             try
             {
                 var order = _userOrderService.GetUserOrders(userId);
@@ -248,6 +250,5 @@ namespace _2Sport_BE.Controllers
                 return builder.ToString();
             }
         }
-
     }
 }
