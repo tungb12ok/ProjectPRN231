@@ -32,6 +32,8 @@ namespace _2Sport_BE.Service.Services
                {
                    OrderId = o.Id,
                    TotalPrice = o.TotalPrice,
+                   OrderDate = o.ReceivedDate ?? DateTime.Now,
+                   Status = o.Status == 1 ? "Success" : "Cancel",
                    Products = o.OrderDetails.Select(od => new ProductInOrderDto
                    {
                        ProductId = od.ProductId ?? 0,
@@ -44,7 +46,8 @@ namespace _2Sport_BE.Service.Services
                        Offers = od.Product.Offers,
                        MainImageName = od.Product.MainImageName,
                        MainImagePath = od.Product.MainImagePath
-                   }).ToList()
+                   }
+                   ).ToList()
                })
                .ToList();
             return orders;

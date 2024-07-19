@@ -12,5 +12,8 @@ namespace _2Sport_BE.Service.Dtos
         public List<ProductInOrderDto> Products { get; set; }
         public decimal? TotalPrice { get; set; }
         public DateTime OrderDate { get; set; }
+        public String Status { get; set; }
+        
+        
     }
 }

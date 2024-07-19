@@ -76,7 +76,7 @@ namespace _2Sport_BE.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("UserOrderd")]
+        [HttpGet("MyOrder")]
         [Authorize]
         public IActionResult getUserOrderd()
         {
