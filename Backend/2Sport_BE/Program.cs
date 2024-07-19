@@ -15,23 +15,17 @@ using _2Sport_BE.Service.Services;
 using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Cấu hình MailSettings
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("AppSettings:MailSettings"));
 builder.Services.AddTransient<ISendMailService, _2Sport_BE.Services.MailService>();
 builder.Services.AddHttpClient();
 
-// Đăng ký dịch vụ
 builder.Services.Register();
-
-// Cấu hình Controllers
+// Add services to the container.
 builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
-
-// Cấu hình PayOS
+//Setting PayOs
 builder.Services.Configure<PayOSSettings>(builder.Configuration.GetSection("PayOSSettings"));
-
-// Cấu hình JWT
+//JWT services
 var appsettingSection = builder.Configuration.GetSection("ServiceConfiguration");
 builder.Services.Configure<ServiceConfiguration>(appsettingSection);
 var serviceConfiguration = appsettingSection.Get<ServiceConfiguration>();
@@ -94,40 +88,46 @@ builder.Services.AddSwaggerGen(c =>
                     Id = "Bearer"
                 }
             },
-            new string[] {}
+            new string[] { }
         }
     });
 });
-
-// Cấu hình CORS
 builder.Services.AddCors(opt =>
 {
     opt.AddPolicy("CorsPolicy", builder =>
     {
-        builder.AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader();
+        builder
+            .WithOrigins("157.66.24.101:80")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials()
+            .SetIsOriginAllowed((host) => true);
     });
 });
-
-// Cấu hình AutoMapper
+//Mapping services
 var mappingConfig = new MapperConfiguration(mc => { mc.AddProfile(new Mapping()); });
 IMapper mapper = mappingConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
 builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Cấu hình middleware
-app.UseCors("CorsPolicy");
+// Configure the HTTP request pipeline.
+
 app.UseSwagger();
 app.UseSwaggerUI();
+
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseCors("CorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseStaticFiles();
+
 app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
 app.Run();
