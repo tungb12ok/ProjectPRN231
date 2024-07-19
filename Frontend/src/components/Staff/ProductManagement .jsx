@@ -25,7 +25,7 @@ const ProductManagement = () => {
             const response = await getProductListPagination({ currentPage, perPage, sortBy, isAscending });
             setProducts(response.data.data.$values);
             setTotalProducts(response.data.total);
-            toast.success("Go to page "+currentPage)
+            toast.success("Go to page " + currentPage)
         } catch (error) {
             console.error("Error fetching products", error);
         }
@@ -64,7 +64,9 @@ const ProductManagement = () => {
                         <ProductTable products={products} setProducts={setProducts} fetchProducts={fetchProducts} handleSortChange={handleSortChange} />
                     </div>
                     <Pagination total={totalProducts} current={currentPage} onChange={handlePageChange} perPage={perPage} />
-                    {isModalOpen && <AddProductModal closeModal={closeModal} handleAddProduct={handleAddProduct} />}
+                    <div className="overflow-auto rounded p-2 w-60">
+                        {isModalOpen && <AddProductModal closeModal={closeModal} handleAddProduct={handleAddProduct} />}
+                    </div>
                 </main>
             </div>
         </div>

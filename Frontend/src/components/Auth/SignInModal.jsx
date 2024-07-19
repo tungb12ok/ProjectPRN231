@@ -33,6 +33,8 @@ export default function SignInModal() {
     try {
       await authenticateUser(dispatch, data);
       setIsSignInOpen(false);
+      console.log('Login successful!');
+      toast.success('Login successful!');
     } catch (error) {
       toast.error('Login failed!');
     }

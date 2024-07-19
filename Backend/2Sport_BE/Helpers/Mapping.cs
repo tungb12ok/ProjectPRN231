@@ -10,7 +10,12 @@ namespace _2Sport_BE.Helpers
         {
             #region User
             CreateMap<User, UserVM>()
-                .ForMember(_dest => _dest.RoleName, opt => opt.MapFrom(src => src.Role.RoleName));
+                .ForMember(_dest => _dest.RoleName, opt => opt.MapFrom(src => src.Role.RoleName))
+                .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender))
+                .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone))
+                .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => src.BirthDate))
+                .ForMember(dest => dest.CreatedDate, opt => opt.MapFrom(src => src.CreatedDate))
+                .ForMember(dest => dest.LastUpdate, opt => opt.MapFrom(src => src.LastUpdate));
             CreateMap<UserCM, User>();
             CreateMap<UserUM, User>();
             #endregion

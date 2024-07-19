@@ -27,6 +27,7 @@ namespace _2Sport_BE.Service.Services
         Task<Product> GetProductById(int id);
         Task AddProducts(IEnumerable<Product> products);
         Task DeleteProductById(int id);
+        Task UpateStatusProduct(int id, bool status);
         Task UpdateProduct(Product newProduct);
         Task AddProduct(Product addedProducts);
     }
@@ -47,6 +48,13 @@ namespace _2Sport_BE.Service.Services
         public async Task DeleteProductById(int id)
         {
             await _unitOfWork.ProductRepository.DeleteAsync(id);
+        }
+
+        public async Task UpateStatusProduct(int id, bool status)
+        {
+            var productUpdate = await GetProductById(id);
+            productUpdate.Status = status;
+            await _unitOfWork.SaveChanges();
         }
 
         public async Task<IQueryable<Product>> GetAllProducts()

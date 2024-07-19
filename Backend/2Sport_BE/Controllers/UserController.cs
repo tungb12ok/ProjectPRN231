@@ -171,16 +171,18 @@ namespace _2Sport_BE.Controllers
 
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<User>> DeleteUser(int id)
+        [HttpPost("UpdateActive")]
+        public async Task<ActionResult<User>> UpdateActive(int id, bool status)
         {
-            var user = await _userService.FindAsync(id);
-            if(user == null)
+            try
             {
-                return NotFound();
+                await _userService.UpdateStatusUser(id, status);
+                return Ok("Update status successfuly!");
             }
-            await _userService.RemoveAsync(id);
-            return await Task.FromResult(user);
+            catch (Exception e)
+            {
+                return BadRequest("Delete Failed!");
+            }
         }
         [HttpPut("change-status/{id}")]
         public async Task<IActionResult> ChangeStatusUser(int id)

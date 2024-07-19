@@ -320,15 +320,14 @@ namespace _2Sport_BE.Controllers
             
         }
 
-        [HttpDelete]
-        [Route("delete-product/{id}")]
-        public async Task<IActionResult> DeleteProduct(int id)
+        [HttpPost]
+        [Route("update-product-status")]
+        public async Task<IActionResult> UpdateStatusProduct(int id, bool status)
         {
             try
             {
-                await _productService.DeleteProductById(id);
-                _unitOfWork.Save();
-                return Ok("Delete product successfully!");
+                await _productService.UpateStatusProduct(id, status);
+                return Ok("InActive product successfully!");
             } catch (Exception ex)
             {
                 return BadRequest(ex.Message);

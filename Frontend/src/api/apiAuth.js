@@ -12,7 +12,7 @@ export const signIn = (userName, password) => {
   }, {
     headers: {
       'accept': '*/*'
-    }
+        }
   });
 };
 

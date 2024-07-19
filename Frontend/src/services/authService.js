@@ -11,7 +11,6 @@ export const authenticateUser = async (dispatch, data) => {
     localStorage.setItem('refreshToken', response.data.data.refreshToken);
     const decoded = jwtDecode(response.data.data.token);
     dispatch(login(decoded));
-    toast.success("Login successful");
     return decoded;
   } catch (error) {
     console.error('Login failed', error);
@@ -32,6 +31,7 @@ export const signUpUser = async (userData) => {
 
 export const signOutUser = async (data) => {
   try {
+    console.log("sign out user: ", data);
     const response = await signOut(data);
     return response;
   } catch (error) {

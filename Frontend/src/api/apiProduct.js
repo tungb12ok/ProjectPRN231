@@ -61,11 +61,12 @@ export const deleteProductById = (id) => {
   });
 };
 
-export const addProduct = (product) => {
-  const url = `${API_BASE_URL}/add-product`;
+export const addProduct = async (product, token) => {
+  const url = `${API_BASE_URL}/add-product-list`;
   return axios.post(url, product, {
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     }
   });
 };

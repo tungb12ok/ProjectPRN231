@@ -16,6 +16,7 @@ namespace _2Sport_BE.Infrastructure.Services
         Task RemoveAsync(int id);
         Task<User> FindOrInsert(Expression<Func<User, bool>> where);
         Task<bool> CheckExistAsync(int id);
+        Task UpdateStatusUser(int id, bool status);
         void Save();
 
     }
@@ -50,6 +51,13 @@ namespace _2Sport_BE.Infrastructure.Services
                 return true;
             }
             return false;
+        }
+
+        public async Task UpdateStatusUser(int id, bool status)
+        {
+            var user = await FindAsync(id);
+            user.IsActive = status;
+            await unitOfWork.SaveChanges();
         }
 
         public async Task<User> FindAsync(int id)
