@@ -53,13 +53,14 @@ namespace _2Sport_BE.Controllers
             _unitOfWork = unitOfWork;
         }
         [HttpPost("checkout-orders")]
-        public async Task<IActionResult> CreatePayOsLink([FromBody] OrderCM orderCM, int orderMethodId, string description)
+        public async Task<IActionResult> CreatePayOsLink([FromBody] OrderCM orderCM, int orderMethodId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest("Invalid request data.");
             }
 
+            string description = "CODE" + GenerateOrderCode();
             var user = await GetUserFromToken();
             if (user is null)
             {
@@ -210,7 +211,7 @@ namespace _2Sport_BE.Controllers
             var order = new Order
             {
                 OrderCode = GenerateOrderCode(),
-                Status = (int?)OrderStatus.Order_Confirmation,
+                Status = 0,
                 TransportFee = orderCM.TransportFee,
                 PaymentMethodId = paymentMethodId,
                 PaymentMethod = paymentMethod,
