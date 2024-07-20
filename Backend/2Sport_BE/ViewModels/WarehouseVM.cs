@@ -1,6 +1,5 @@
-﻿using _2Sport_BE.Repository.Models;
-
-namespace _2Sport_BE.ViewModels
+﻿
+namespace HightSportShopWebAPI.ViewModels
 {
     public class WarehouseDTO
     {

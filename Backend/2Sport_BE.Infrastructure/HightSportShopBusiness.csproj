@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <RootNamespace>_2Sport_BE.Service</RootNamespace>
+    <RootNamespace>HightSportShopBusiness</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\2Sport_BE.Core\2Sport_BE.Core.csproj" />
+    <ProjectReference Include="..\2Sport_BE.Core\HightSportShopDataAccess.csproj" />
   </ItemGroup>
 
 </Project>

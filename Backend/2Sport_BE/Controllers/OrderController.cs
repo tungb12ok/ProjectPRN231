@@ -1,15 +1,14 @@
-﻿using _2Sport_BE.DataContent;
-using _2Sport_BE.Infrastructure.Services;
-using _2Sport_BE.Repository.Models;
-using _2Sport_BE.Service.Enums;
-using _2Sport_BE.Service.Services;
-using _2Sport_BE.ViewModels;
-using AutoMapper;
+﻿using AutoMapper;
+using HightSportShopBusiness.Enums;
+using HightSportShopBusiness.Models;
+using HightSportShopBusiness.Services;
+using HightSportShopWebAPI.DataContent;
+using HightSportShopWebAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.Security.Claims;
 
-namespace _2Sport_BE.Controllers
+namespace HightSportShopWebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -1,8 +1,4 @@
-﻿using _2Sport_BE.DataContent;
-using _2Sport_BE.Extensions;
-using _2Sport_BE.Helpers;
-using _2Sport_BE.Services;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,20 +7,21 @@ using MailKit;
 using System.Text;
 using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Models;
-using _2Sport_BE.Service.Services;
 using System.Configuration;
+using HightSportShopWebAPI.Services;
+using HightSportShopWebAPI.Extensions;
+using HightSportShopWebAPI.DataContent;
+using HightSportShopWebAPI.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("AppSettings:MailSettings"));
-builder.Services.AddTransient<ISendMailService, _2Sport_BE.Services.MailService>();
+builder.Services.AddTransient<ISendMailService, HightSportShopWebAPI.Services.MailService>();
 builder.Services.AddHttpClient();
 
 builder.Services.Register();
 // Add services to the container.
 builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
-//Setting PayOs
-builder.Services.Configure<PayOSSettings>(builder.Configuration.GetSection("PayOSSettings"));
 //JWT services
 var appsettingSection = builder.Configuration.GetSection("ServiceConfiguration");
 builder.Services.Configure<ServiceConfiguration>(appsettingSection);
@@ -107,7 +104,6 @@ IMapper mapper = mappingConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

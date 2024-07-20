@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace _2Sport_BE.Helpers
+namespace HightSportShopWebAPI.Helpers
 {
     public static class LinqHelper
     {

@@ -1,6 +1,6 @@
-﻿using _2Sport_BE.Repository.Models;
+﻿using HightSportShopBusiness.Models;
 
-namespace _2Sport_BE.Repository.Interfaces
+namespace HightSportShopBusiness.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {

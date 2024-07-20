@@ -1,8 +1,9 @@
-﻿using _2Sport_BE.Repository.Models;
+﻿
+
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
-namespace _2Sport_BE.ViewModels
+namespace HightSportShopWebAPI.ViewModels
 {
     public class UserDTO
     {

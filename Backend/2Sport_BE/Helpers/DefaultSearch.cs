@@ -1,4 +1,4 @@
-﻿namespace _2Sport_BE.Helpers
+﻿namespace HightSportShopWebAPI.Helpers
 {
     public class DefaultSearch
     {

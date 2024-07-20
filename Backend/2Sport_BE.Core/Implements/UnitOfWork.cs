@@ -1,7 +1,8 @@
-﻿using _2Sport_BE.Repository.Interfaces;
-using _2Sport_BE.Repository.Models;
+﻿using HightSportShopBusiness.Interfaces;
+using HightSportShopBusiness.Models;
+using HightSportShopDataAccess.Implements;
 
-namespace _2Sport_BE.Repository.Implements
+namespace HightSportShopWebAPI.Repository.Implements
 {
     public class UnitOfWork : IUnitOfWork
     {
@@ -281,6 +282,48 @@ namespace _2Sport_BE.Repository.Implements
                 return _sportRepository;
             }
         }
+
+        IGenericRepository<Blog> IUnitOfWork.BlogRepository => throw new NotImplementedException();
+
+        IGenericRepository<Brand> IUnitOfWork.BrandRepository => throw new NotImplementedException();
+
+        IGenericRepository<Cart> IUnitOfWork.CartRepository => throw new NotImplementedException();
+
+        IGenericRepository<CartItem> IUnitOfWork.CartItemRepository => throw new NotImplementedException();
+
+        IGenericRepository<Category> IUnitOfWork.CategoryRepository => throw new NotImplementedException();
+
+        IGenericRepository<ImagesVideo> IUnitOfWork.ImagesVideoRepository => throw new NotImplementedException();
+
+        IGenericRepository<ImportHistory> IUnitOfWork.ImportHistoryRepository => throw new NotImplementedException();
+
+        IGenericRepository<Like> IUnitOfWork.LikeRepository => throw new NotImplementedException();
+
+        IGenericRepository<Order> IUnitOfWork.OrderRepository => throw new NotImplementedException();
+
+        IGenericRepository<OrderDetail> IUnitOfWork.OrderDetailRepository => throw new NotImplementedException();
+
+        IGenericRepository<PaymentMethod> IUnitOfWork.PaymentMethodRepository => throw new NotImplementedException();
+
+        IGenericRepository<Product> IUnitOfWork.ProductRepository => throw new NotImplementedException();
+
+        IGenericRepository<Classification> IUnitOfWork.ClassificationRepository => throw new NotImplementedException();
+
+        IGenericRepository<Review> IUnitOfWork.ReviewRepository => throw new NotImplementedException();
+
+        IGenericRepository<Role> IUnitOfWork.RoleRepository => throw new NotImplementedException();
+
+        IGenericRepository<ShipmentDetail> IUnitOfWork.ShipmentDetailRepository => throw new NotImplementedException();
+
+        IGenericRepository<Supplier> IUnitOfWork.SupplierRepository => throw new NotImplementedException();
+
+        IGenericRepository<User> IUnitOfWork.UserRepository => throw new NotImplementedException();
+
+        IGenericRepository<Warehouse> IUnitOfWork.WarehouseRepository => throw new NotImplementedException();
+
+        IGenericRepository<RefreshToken> IUnitOfWork.RefreshTokenRepository => throw new NotImplementedException();
+
+        IGenericRepository<Sport> IUnitOfWork.SportRepository => throw new NotImplementedException();
 
         private bool disposed = false;
         protected virtual void Dispose(bool disposing)

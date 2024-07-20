@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace _2Sport_BE.Repository.Models
+namespace HightSportShopBusiness.Models
 {
     public partial class Review
     {

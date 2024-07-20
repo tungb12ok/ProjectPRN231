@@ -1,8 +1,8 @@
-﻿using _2Sport_BE.Infrastructure.Services;
-using _2Sport_BE.Service.Enums;
-using _2Sport_BE.Service.Services;
-using _2Sport_BE.ViewModels;
+﻿
 using AutoMapper;
+using HightSportShopBusiness.Enums;
+using HightSportShopBusiness.Services;
+using HightSportShopWebAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace _2Sport_BE.Controllers
+namespace HightSportShopWebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

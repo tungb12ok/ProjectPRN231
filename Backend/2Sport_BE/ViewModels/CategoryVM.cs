@@ -1,6 +1,8 @@
-﻿using _2Sport_BE.Repository.Models;
+﻿
 
-namespace _2Sport_BE.ViewModels
+using HightSportShopBusiness.Models;
+
+namespace HightSportShopWebAPI.ViewModels
 {
     public class CategoryDTO
     {

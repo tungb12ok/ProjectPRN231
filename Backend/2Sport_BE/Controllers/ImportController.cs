@@ -1,15 +1,14 @@
-﻿using _2Sport_BE.DataContent;
-using _2Sport_BE.Repository.Models;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using _2Sport_BE.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
-using _2Sport_BE.Service.Services;
-using _2Sport_BE.ViewModels;
+
 using AutoMapper;
 using System.Text;
+using HightSportShopBusiness.Services;
+using HightSportShopBusiness.Models;
+using HightSportShopWebAPI.ViewModels;
 
-namespace _2Sport_BE.Controllers
+namespace HightSportShopBusiness.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -18,41 +17,19 @@ namespace _2Sport_BE.Controllers
         private readonly IImportHistoryService _importService;
         private readonly IWarehouseService _warehouseService;
         private readonly IProductService _productService;
-        private readonly ISupplierService _supplierService;
         private readonly IMapper _mapper;
         private static readonly char[] characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".ToCharArray();
         public ImportController(IImportHistoryService importService, 
                                 IWarehouseService warehouseService,
                                 IProductService productService,
-                                ISupplierService supplierService,
                                 IMapper mapper)
         {
             _importService = importService;
             _warehouseService = warehouseService;
             _productService = productService;
-            _supplierService = supplierService;
             _mapper = mapper;
         }
-        [HttpGet]
-        [Route("list-all-import-histories")]
-        public async Task<IActionResult> ListAllAsync()
-        {
-            try
-            {
-                var query = (await _importService.ListAllAsync()).Include(_ => _.Product).ToList();
-                foreach (var item in query)
-                {
-                    item.Product = await _productService.GetProductById((int)item.ProductId);
-                    item.Supplier = (await _supplierService.GetSupplierById((int)item.SupplierId)).FirstOrDefault();
-                }
-                var result = _mapper.Map<List<ImportVM>>(query);
-                return Ok(new { total = result.Count(), data = result });
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e);
-            }
-        }
+        
 
         [HttpPost]
         [Route("import-product")]

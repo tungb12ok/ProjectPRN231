@@ -1,8 +1,8 @@
-﻿using _2Sport_BE.Repository.Models;
-using _2Sport_BE.ViewModels;
-using AutoMapper;
+﻿using AutoMapper;
+using HightSportShopWebAPI.ViewModels;
+using HightSportShopBusiness.Models;
 
-namespace _2Sport_BE.Helpers
+namespace HightSportShopWebAPI.Helpers
 {
     public class Mapping : Profile
     {

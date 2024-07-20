@@ -1,5 +1,5 @@
-﻿using _2Sport_BE.Repository.Interfaces;
-using _2Sport_BE.Repository.Models;
+﻿using HightSportShopBusiness.Interfaces;
+using HightSportShopBusiness.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _2Sport_BE.Service.Services
+namespace HightSportShopBusiness.Services
 {
     public interface ISportService
     {

@@ -1,16 +1,16 @@
-﻿using _2Sport_BE.Helpers;
-using _2Sport_BE.Infrastructure.Services;
-using _2Sport_BE.Repository.Interfaces;
-using _2Sport_BE.Repository.Models;
-using _2Sport_BE.Service.Services;
-using _2Sport_BE.ViewModels;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Bcpg.OpenPgp;
+using HightSportShopBusiness.Services;
+using HightSportShopBusiness.Interfaces;
+using HightSportShopBusiness.Models;
+using HightSportShopWebAPI.ViewModels;
+using HightSportShopBusiness.Service.Services;
+using HightSportShopWebAPI.Helpers;
 
-namespace _2Sport_BE.Controllers
+namespace HightSportShopBusiness.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

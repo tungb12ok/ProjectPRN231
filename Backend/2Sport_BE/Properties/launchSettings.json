@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "_2Sport_BE": {
+    "HightSportShopBusiness": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",

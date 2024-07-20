@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace _2Sport_BE.DataContent
+namespace HightSportShopWebAPI.DataContent
 {
     public class ResponseModel<T>
     {

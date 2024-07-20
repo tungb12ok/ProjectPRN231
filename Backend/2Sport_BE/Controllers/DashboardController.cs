@@ -1,9 +1,9 @@
-﻿using _2Sport_BE.Service.Services;
+﻿using HightSportShopBusiness.Services;
 using Microsoft.AspNetCore.Components.RenderTree;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace _2Sport_BE.Controllers
+namespace HightSportShopWebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -1,15 +1,14 @@
-﻿using _2Sport_BE.Infrastructure.Services;
-using _2Sport_BE.Repository.Implements;
-using _2Sport_BE.Repository.Interfaces;
-using _2Sport_BE.Repository.Models;
-using _2Sport_BE.Service.Services;
+﻿using HightSportShopDataAccess.Models;
+using HightSportShopBusiness.Services;
+using HightSportShopBusiness.Interfaces;
+using HightSportShopBusiness.Services;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 using Net.payOS;
 using Net.payOS.Types;
 using static System.Net.WebRequestMethods;
 
-namespace _2Sport_BE.Service.Services
+namespace HightSportShopBusiness.Services
 {
     public class PayOSSettings
     {

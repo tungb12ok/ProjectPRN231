@@ -1,10 +1,10 @@
-﻿using _2Sport_BE.Repository.Models;
+﻿using HightSportShopBusiness.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 
-namespace _2Sport_BE.Controllers
+namespace HightSportShopWebAPI.Controllers
 {
     [ApiController]
     [Route("api/mbbank")]

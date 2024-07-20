@@ -1,5 +1,5 @@
 ﻿
-namespace _2Sport_BE.ViewModels
+namespace HightSportShopWebAPI.ViewModels
 {
     public class PaymentMethodDTO
     {

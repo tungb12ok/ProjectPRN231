@@ -1,6 +1,6 @@
-﻿using _2Sport_BE.Repository.Interfaces;
-using _2Sport_BE.Repository.Models;
-using _2Sport_BE.Service.Dtos;
+﻿using HightSportShopBusiness.Dtos;
+using HightSportShopBusiness.Interfaces;
+using HightSportShopBusiness.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _2Sport_BE.Service.Services
+namespace HightSportShopBusiness.Services
 {
     public interface IDashboardService
     {

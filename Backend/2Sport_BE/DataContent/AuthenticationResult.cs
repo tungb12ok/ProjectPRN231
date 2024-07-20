@@ -1,8 +1,6 @@
-﻿using _2Sport_BE.Repository.Models;
-using _2Sport_BE.ViewModels;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace _2Sport_BE.DataContent
+namespace HightSportShopWebAPI.DataContent
 {
     public class TokenModel
     {

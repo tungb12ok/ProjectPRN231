@@ -1,6 +1,6 @@
 ﻿using AutoMapper.Configuration.Annotations;
 
-namespace _2Sport_BE.ViewModels
+namespace HightSportShopWebAPI.ViewModels
 {
    
     public class ShipmentDetailDTO

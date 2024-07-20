@@ -1,18 +1,15 @@
-﻿using _2Sport_BE.Repository.Models;
-using _2Sport_BE.Infrastructure.Services;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using _2Sport_BE.DataContent;
-using _2Sport_BE.ViewModels;
 using AutoMapper;
-using _2Sport_BE.Service.Services;
 using System.Text;
 using System.Security.Cryptography;
-using _2Sport_BE.Helpers;
+using HightSportShopBusiness.Services;
+using HightSportShopWebAPI.ViewModels;
+using HightSportShopBusiness.Models;
 
-namespace _2Sport_BE.Controllers
+namespace HightSportShopWebAPI.Controllers
 {
     
     [Route("api/[controller]")]

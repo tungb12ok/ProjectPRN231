@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>_2Sport_BE</RootNamespace>
+    <RootNamespace>HightSportShopBusiness</RootNamespace>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
     <RuntimeIdentifiers>linux-x64</RuntimeIdentifiers>
@@ -30,10 +30,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\2Sport_BE.Core\2Sport_BE.Core.csproj">
+    <ProjectReference Include="..\2Sport_BE.Core\HightSportShopDataAccess.csproj">
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\2Sport_BE.Infrastructure\2Sport_BE.Infrastructure.csproj">
+    <ProjectReference Include="..\2Sport_BE.Infrastructure\HightSportShopBusiness.csproj">
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>

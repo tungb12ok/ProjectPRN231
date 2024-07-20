@@ -1,11 +1,11 @@
-﻿using _2Sport_BE.Repository.Interfaces;
-using _2Sport_BE.Repository.Models;
-using _2Sport_BE.Service.Dtos;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using System.Security.Principal;
-using _2Sport_BE.Service;
+using HightSportShopBusiness;
 using System.Security.Claims;
-namespace _2Sport_BE.Service.Services
+using HightSportShopBusiness.Dtos;
+using HightSportShopBusiness.Models;
+using HightSportShopBusiness.Interfaces;
+namespace HightSportShopBusiness.Services
 {
 
     public interface IUserOrderService

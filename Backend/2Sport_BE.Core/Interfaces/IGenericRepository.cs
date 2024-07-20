@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace _2Sport_BE.Repository.Interfaces
+namespace HightSportShopBusiness.Interfaces
 {
     public interface IGenericRepository<T> where T : class
     {

@@ -1,6 +1,6 @@
-﻿using _2Sport_BE.Repository.Models;
+﻿using HightSportShopBusiness.Models;
 
-namespace _2Sport_BE.ViewModels
+namespace HightSportShopWebAPI.ViewModels
 {
 	public class ReviewDTO
 	{

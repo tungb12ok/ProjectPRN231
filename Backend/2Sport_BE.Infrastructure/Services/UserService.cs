@@ -1,9 +1,9 @@
-﻿using _2Sport_BE.Repository.Interfaces;
-using _2Sport_BE.Repository.Models;
+﻿using HightSportShopBusiness.Interfaces;
+using HightSportShopBusiness.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace _2Sport_BE.Infrastructure.Services
+namespace HightSportShopBusiness.Services
 {
     public interface IUserService
     {

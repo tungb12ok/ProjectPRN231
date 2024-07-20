@@ -1,14 +1,14 @@
-﻿using _2Sport_BE.DataContent;
-using _2Sport_BE.Infrastructure.Services;
-using _2Sport_BE.Repository.Models;
-using _2Sport_BE.Service.Services;
-using _2Sport_BE.ViewModels;
+﻿
 using AutoMapper;
+using HightSportShopBusiness.Models;
+using HightSportShopBusiness.Services;
+using HightSportShopWebAPI.DataContent;
+using HightSportShopWebAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 
-namespace _2Shipment_BE.Controllers
+namespace HightSportShopWebAPI.Controllers
 {
     public class ShipmentDetailController : Controller
     {

@@ -1,8 +1,8 @@
-﻿using _2Sport_BE.DataContent;
-using _2Sport_BE.Infrastructure.Services;
-using _2Sport_BE.Repository.Interfaces;
-using _2Sport_BE.Repository.Models;
-using _2Sport_BE.ViewModels;
+﻿using HightSportShopWebAPI.DataContent;
+using HightSportShopBusiness.Interfaces;
+using HightSportShopBusiness.Models;
+using HightSportShopBusiness.Services;
+using HightSportShopWebAPI.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -10,7 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace _2Sport_BE.API.Services
+namespace HightSportShopWebAPI.Services
 {
     public interface IIdentityService
     {

@@ -3,7 +3,7 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 
-namespace _2Sport_BE.Services
+namespace HightSportShopWebAPI.Services
 {
     public class MailSettings
     {

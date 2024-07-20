@@ -1,14 +1,14 @@
-﻿using _2Sport_BE.Repository.Interfaces;
-using _2Sport_BE.Repository.Implements;
-using _2Sport_BE.Repository.Models;
-using Microsoft.EntityFrameworkCore;
-using _2Sport_BE.Infrastructure.Services;
-using _2Sport_BE.API.Services;
-using _2Sport_BE.Service.Services;
-using _2Sport_BE.Services;
-using System.Configuration;
+﻿
 
-namespace _2Sport_BE.Extensions
+using HightSportShopWebAPI.Repository.Implements;
+using HightSportShopBusiness.Interfaces;
+using HightSportShopBusiness.Models;
+using HightSportShopBusiness.Services;
+using HightSportShopWebAPI.Services;
+using Microsoft.EntityFrameworkCore;
+using HightSportShopBusiness.Service.Services;
+
+namespace HightSportShopWebAPI.Extensions
 {
     public static class ServiceCollection
     {

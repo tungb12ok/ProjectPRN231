@@ -1,12 +1,11 @@
-﻿using _2Sport_BE.Infrastructure.Services;
-using _2Sport_BE.Repository.Models;
-using _2Sport_BE.Service.Services;
-using _2Sport_BE.ViewModels;
-using AutoMapper;
+﻿using AutoMapper;
+using HightSportShopBusiness.Models;
+using HightSportShopBusiness.Services;
+using HightSportShopWebAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace _2Sport_BE.Controllers
+namespace HightSportShopWebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
