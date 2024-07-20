@@ -2,7 +2,9 @@
 using _2Sport_BE.Repository.Models;
 using _2Sport_BE.Service.Dtos;
 using Microsoft.Extensions.Configuration;
-
+using System.Security.Principal;
+using _2Sport_BE.Service;
+using System.Security.Claims;
 namespace _2Sport_BE.Service.Services
 {
 
@@ -16,6 +18,7 @@ namespace _2Sport_BE.Service.Services
         private readonly TwoSportDBContext _context;
         private readonly IConfiguration _configuration;
         private readonly IUnitOfWork _unitOfWork;
+
         public UserOrderService(TwoSportDBContext context, IConfiguration configuration, IUnitOfWork unitOfWork)
         {
             _context = context;
@@ -23,7 +26,7 @@ namespace _2Sport_BE.Service.Services
             _unitOfWork = unitOfWork;
         }
 
-        public List<UserOrderDto> GetUserOrders(int  userId)
+        public List<UserOrderDto> GetUserOrders(int userId)
         {
 
             var orders = _context.Orders
