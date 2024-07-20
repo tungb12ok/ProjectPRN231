@@ -92,18 +92,15 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-builder.Services.AddCors(opt =>
+builder.Services.AddCors(options =>
 {
-    opt.AddPolicy("CorsPolicy", builder =>
-    {
-        builder
-            .WithOrigins("157.66.24.101:80")
+    options.AddPolicy("CorsPolicy", builder =>
+        builder.WithOrigins("http://tungfpt.click", "http://localhost:5173", "http://127.0.0.1:5173")
             .AllowAnyMethod()
             .AllowAnyHeader()
-            .AllowCredentials()
-            .SetIsOriginAllowed((host) => true);
-    });
+    );
 });
+
 //Mapping services
 var mappingConfig = new MapperConfiguration(mc => { mc.AddProfile(new Mapping()); });
 IMapper mapper = mappingConfig.CreateMapper();

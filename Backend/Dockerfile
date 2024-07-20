@@ -7,9 +7,6 @@ EXPOSE 5001
 ENV ASPNETCORE_ENVIRONMENT=Development
 ENV ASPNETCORE_URLS=https://+:443;http://+:80
 
-# Sao chép chứng chỉ vào container từ đường dẫn chính xác
-COPY ./2Sport_BE/localhost.pfx /app/localhost.pfx
-
 # Build image
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
