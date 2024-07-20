@@ -6,6 +6,7 @@ import {
   Typography,
   Avatar,
   Checkbox,
+  Button,
 } from "@material-tailwind/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -13,13 +14,27 @@ import {
   faArrowUp,
   faCalendar,
 } from "@fortawesome/free-solid-svg-icons";
-import { fetchAllUsers } from "../../services/ManageUserService";
+import { fetchAllUsers, ActiveUser } from "../../services/ManageUserService";
 import HeaderStaff from "../Staff/HeaderStaff";
 import SidebarStaff from "../Staff/SidebarStaff";
+import { data } from "autoprefixer";
 
 export default function ManageUser() {
   const [users, setUsers] = useState([]);
+  const [update, setUpdate] = useState(true);
+
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+
+  const handleActive = async (id, status) => {
+    await ActiveUser(id, status)
+      .then((data) => {
+        setUpdate(!update);
+        console.log('Cập nhật thành công');
+      })
+      .catch((data) => {
+        console.log('Cập nhật thất bại');
+      })
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,7 +49,7 @@ export default function ManageUser() {
     };
 
     fetchData();
-  }, []);
+  }, [update]);
 
   const onSelectChange = (selectedKey) => {
     setSelectedRowKeys((prevSelectedRowKeys) =>
@@ -161,6 +176,15 @@ export default function ManageUser() {
                         lastUpdate
                       </Typography>
                     </th>
+                    <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                      <Typography
+                        variant="large"
+                        color="blue-gray"
+                        className="font-normal leading-none opacity-70"
+                      >
+                        Trạng thái tài khoản
+                      </Typography>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -279,6 +303,24 @@ export default function ManageUser() {
                           >
                             {new Date(user.lastUpdate).toLocaleDateString()}
                           </Typography>
+                        </td>
+                        <td className={classes}>
+                          <div className="flex justify-center items-center">
+                            <Typography
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal flex items-center"
+                            >
+                              {user.isActive ? "Hoạt động" : "Khóa"}
+                              <Button
+                                onClick={() => handleActive(user.id, !user.isActive)}
+                                className={`ml-5 ${user.isActive ? 'bg-red-500 text-white' : 'bg-green-500 text-white'} `}
+                                type="button"
+                              >
+                                {user.isActive ? "DeActive" : "Active"}
+                              </Button>
+                            </Typography>
+                          </div>
                         </td>
                       </tr>
                     );

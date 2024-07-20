@@ -7,14 +7,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash, faUser } from '@fortawesome/free-solid-svg-icons';
 import { login, selectUser } from '../../redux/slices/authSlice';
 import UserDropdown from '../User/userDropdown';
-import SignUpModal from './SignUpModal';
+import SignUpModal from './SignUpModal.jsx';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { authenticateUser } from '../../services/authService';
 import ForgotPasswordModal from './ForgotPasswordModal';
 import LoginGoogle from './LoginGoogle';
 import { useTranslation } from 'react-i18next';
-
 export default function SignInModal() {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);

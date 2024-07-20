@@ -1,4 +1,5 @@
-import { addToCartAPI, getCartAPI } from '../api/apiCart';
+// cartService.js
+import { addToCartAPI, getCartAPI, deleteMyCart, updateCartItemQuantityAPI } from '../api/apiCart';
 import { toast } from "react-toastify";
 
 export const addToCart = async (productId, quantity, token) => {
@@ -21,6 +22,45 @@ export const getUserCart = async (sortBy = '', token) => {
   } catch (error) {
     console.error('Error fetching cart:', error);
     toast.error('Error fetching cart');
+    throw error;
+  }
+};
+export const deleteToCart = async (id, token) => {
+  try {
+    const response = await deleteMyCart(id, token);
+    return response.data;
+  } catch (error) {
+    console.error('Remove from cart failed', error);
+    toast.error("Remove from cart failed: " + error.message);
+    throw error;
+  }
+};
+export const updateCartService = async (productId, quantity, token) => {
+  try {
+    const response = await updateCartItemQuantityAPI(productId, quantity, token);
+    return response.data;
+  } catch (error) {
+    console.error('update from cart failed', error);
+    toast.error("update from cart failed: " + error.message);
+    throw error;
+  }
+};
+export const createOrder = async (orderItems, token) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/api/Order/create-order`, {
+      orderItems
+    }, {
+      headers: {
+        'Accept': '*/*',
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    toast.success("Order created successfully");
+    return response.data;
+  } catch (error) {
+    console.error('Create order failed', error);
+    toast.error("Create order failed: " + error.message);
     throw error;
   }
 };

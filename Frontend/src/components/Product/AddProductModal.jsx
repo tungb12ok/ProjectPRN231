@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { addProduct, getSportList, getCategoryList, getBrandList } from "../../api/apiProduct";
+import { addProduct, getSportList, getCategoryList, getBrandList, updateProduct } from "../../api/apiProduct";
 import { uploadImage } from "../../services/imageUploadService";
 import { toast } from "react-toastify";
 
-const AddProductModal = ({ closeModal, handleAddProduct, token }) => {
+const AddProductModal = ({ closeModal, handleAddProduct, token, product }) => {
   const [productName, setProductName] = useState("");
   const [listedPrice, setListedPrice] = useState("");
   const [price, setPrice] = useState("");
@@ -28,7 +28,25 @@ const AddProductModal = ({ closeModal, handleAddProduct, token }) => {
     fetchSports();
     fetchCategories();
     fetchBrands();
-  }, []);
+
+    if (product) {
+      setProductName(product.productName || "");
+      setListedPrice(product.listedPrice || "");
+      setPrice(product.price || "");
+      setSize(product.size || "");
+      setDescription(product.description || "");
+      setColor(product.color || "");
+      setOffers(product.offers || "");
+      setMainImageName(product.mainImageName || "");
+      setMainImagePath(product.mainImagePath || "");
+      setCategoryId(product.categoryId || "");
+      setBrandId(product.brandId || "");
+      setSportId(product.sportId || "");
+      setClassificationId(product.classificationId || "");
+      setProductCode(product.productCode || "");
+      setStatus(product.status !== undefined ? product.status : true);
+    }
+  }, [product]);
 
   const fetchSports = async () => {
     try {
@@ -66,37 +84,42 @@ const AddProductModal = ({ closeModal, handleAddProduct, token }) => {
         console.error('Error uploading image', error);
       }
     }
-    return '';
+    return mainImagePath;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const imageUrl = await handleImageUpload();
-    const newProduct = { 
-      productName, 
-      listedPrice: parseFloat(listedPrice), 
-      price: parseFloat(price), 
-      size, 
-      description, 
-      status, 
-      color, 
-      offers, 
-      mainImageName, 
-      mainImagePath: imageUrl, 
-      categoryId: parseInt(categoryId), 
-      brandId: parseInt(brandId), 
-      sportId: parseInt(sportId), 
-      classificationId: parseInt(classificationId), 
-      productCode 
+    const newProduct = {
+      productName,
+      listedPrice: parseFloat(listedPrice),
+      price: parseFloat(price),
+      size,
+      description,
+      status,
+      color,
+      offers,
+      mainImageName,
+      mainImagePath: imageUrl,
+      categoryId: parseInt(categoryId),
+      brandId: parseInt(brandId),
+      sportId: parseInt(sportId),
+      classificationId: parseInt(classificationId),
+      productCode
     };
 
     try {
-      const response = await addProduct(newProduct, token);
-      handleAddProduct(response.data);
-      toast.success("Product added successfully");
+      if (product) {
+        await updateProduct({ ...newProduct, id: product.id }, token);
+        toast.success("Product updated successfully");
+      } else {
+        const response = await addProduct(newProduct, token);
+        handleAddProduct(response.data);
+        toast.success("Product added successfully");
+      }
       closeModal(); // Close modal on success
     } catch (error) {
-      console.error("Error adding product", error);
+      console.error("Error submitting product", error);
     }
   };
 
@@ -104,7 +127,7 @@ const AddProductModal = ({ closeModal, handleAddProduct, token }) => {
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded shadow-md w-full max-h-screen overflow-y-auto">
         <span className="block text-right text-gray-500 cursor-pointer" onClick={closeModal}>&times;</span>
-        <h2 className="text-2xl font-bold mb-4">Add Product</h2>
+        <h2 className="text-2xl font-bold mb-4">{product ? "Edit Product" : "Add Product"}</h2>
         <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -180,12 +203,12 @@ const AddProductModal = ({ closeModal, handleAddProduct, token }) => {
             </div>
             <div>
               <label className="block text-gray-700">Image:</label>
-              <input type="file" onChange={(e) => setImageFile(e.target.files[0])} required className="w-full px-3 py-2 border rounded" />
+              <input type="file" onChange={(e) => setImageFile(e.target.files[0])} className="w-full px-3 py-2 border rounded" />
             </div>
           </div>
           <div className="flex justify-end mt-4">
             <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
-              Add
+              {product ? "Update" : "Add"}
             </button>
             <button type="button" onClick={closeModal} className="ml-2 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
               Close

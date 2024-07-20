@@ -25,15 +25,15 @@ function Footer() {
         <div className="pl-20 space-y-5 w-1/2 text-gray-700 font-poppins">
           <img
             src="/assets/images/Logo.png"
-            alt="2Sport"
+            alt="HighSport"
             className="max-w-sm max-h-12"
           />
           <p>
             All content on this website is protected by copyright and may not be
-            used without permission from 2Sport. For more information about our
+            used without permission from HighSport. For more information about our
             Privacy Policy, please contact our Support Center.
           </p>
-          <p>Copyright © 2024 2Sport. All Rights Reserved.</p>
+          <p>Copyright © 2024 HighSport. All Rights Reserved.</p>
           <div>
             <p className="font-rubikmonoone ">Get Our Updates</p>
             <div className="flex w-2/3 bg-white border border-gray-400 rounded-full">
@@ -105,7 +105,7 @@ function Footer() {
               </Typography>
               <Typography className="text-xl">
                 <FontAwesomeIcon icon={faEnvelope} className="pr-1" />
-                2sportteam@gmail.com
+                tung020802@gmail.com
               </Typography>
             </div>
 

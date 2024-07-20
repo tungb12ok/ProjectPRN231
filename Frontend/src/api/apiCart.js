@@ -1,3 +1,4 @@
+// apiCart.js
 import axios from 'axios';
 
 import { BASE_URL } from '../config';
@@ -43,6 +44,28 @@ export const getCartItems = (id) => {
   return axios.get(url, {
     headers: {
       'accept': '*/*'
+    }
+  });
+};
+
+export const deleteMyCart = (id, token) => {
+  const url = `${API_BASE_URL}/delete-cart-item/${id}`;
+  return axios.delete(url, {
+    headers: {
+      'Accept': '*/*',
+      'Authorization': `Bearer ${token}`
+    }
+  });
+};
+export const updateCartItemQuantityAPI = (productId, quantity, token) => {
+  return axios.post(`${API_BASE_URL}/add-to-cart`, {
+    productId,
+    quantity,
+  }, {
+    headers: {
+      'Accept': '*/*',
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
     }
   });
 };

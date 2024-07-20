@@ -12,3 +12,10 @@ export const checkoutOrder = (token, orderMethodId, data) => {
     }
   });
 };
+export const checkPaymentStatus = (orderId) => {
+  return axios.get(`${BASE_URL}/api/mbbank/checkAmountAndUpdateOrder/${orderId}`, {
+    headers: {
+      'Accept': '*/*',
+    }
+  });
+};

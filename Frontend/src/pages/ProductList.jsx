@@ -33,14 +33,14 @@ const ProductList = ({ sortBy }) => {
   }, [sortBy, dispatch]);
 
   const handleAddToCart = async (product) => {
-    console.log("Add to cart"+product);
+    console.log("Add to cart" + product);
     const token = localStorage.getItem('token');
     if (token) {
+      toast.success(`${product.productName} is added to cart`);
       try {
         const newQuantity = quantity + 1;
         await addToCart(product.id, newQuantity, token);
         setQuantity(newQuantity);
-        toast.success(`${product.productName} is added to cart`);
       } catch (error) {
         console.error('Error adding product to cart:', error);
         toast.error('Error adding product to cart');

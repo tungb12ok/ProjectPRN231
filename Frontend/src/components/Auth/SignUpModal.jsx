@@ -10,8 +10,8 @@ import { toast } from 'react-toastify';
 import LoginGoogle from './LoginGoogle';
 import { signUpUser } from '../../services/authService';
 
-
 export default function SignUpModal({ isOpen, closeModal, openSignInModal }) {
+  console.log("123@@@");
   const { t } = useTranslation("translation");
   const { register, handleSubmit, formState: { errors }, watch } = useForm();
   const [showPassword, setShowPassword] = useState(false);

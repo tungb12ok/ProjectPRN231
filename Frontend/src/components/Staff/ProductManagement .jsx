@@ -4,7 +4,7 @@ import SidebarStaff from "./SidebarStaff";
 import ProductTable from "../Product/ProductTable";
 import AddProductModal from "../Product/AddProductModal";
 import Pagination from "../../components/Product/Pagination";
-import { getProductListPagination } from "../../api/apiProduct";
+import { getProductListPage } from "../../api/apiProduct";
 import { toast } from "react-toastify";
 
 const ProductManagement = () => {
@@ -22,7 +22,7 @@ const ProductManagement = () => {
 
     const fetchProducts = async () => {
         try {
-            const response = await getProductListPagination({ currentPage, perPage, sortBy, isAscending });
+            const response = await getProductListPage({ currentPage, perPage, sortBy, isAscending });
             setProducts(response.data.data.$values);
             setTotalProducts(response.data.total);
             toast.success("Go to page " + currentPage)

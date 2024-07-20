@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { getUserCart } from '../services/cartService';
+import { getUserCart, deleteToCart, updateCartService, createOrder} from '../services/cartService';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -23,16 +23,46 @@ const UserCart = ({ sortBy }) => {
         console.error('Error fetching cart:', error);
       }
     };
-
+    
     getCart();
   }, [sortBy]);
 
-  const handleRemoveFromCart = (productId) => {
-    // Implement remove from cart logic
+  const handleRemoveFromCart = async (productId) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (token) {
+        await deleteToCart(productId, token);
+        toast.success("Product removed from cart successfully");
+        const updatedCartData = cartData.filter(item => item.id !== productId);
+        setCartData(updatedCartData);
+        setSelectedItems(prevSelected => prevSelected.filter(id => id !== productId));
+      }
+    } catch (error) {
+      console.error('Remove from cart failed', error);
+      toast.error("Remove from cart failed: " + error.message);
+    }
   };
 
-  const handleQuantityChange = (product, change) => {
-    // Implement quantity change logic
+  const handleQuantityChange = async (product, change) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const newQuantity = change === 'increase' ? product.quantity + 1 : product.quantity - 1;
+        if (newQuantity <= 0) {
+          toast.error("Quantity must be greater than 0");
+          return;
+        }
+        await updateCartService(product.productId, newQuantity, token);
+        toast.success("Quantity updated successfully");
+        const updatedCartData = cartData.map(item =>
+          item.id === product.id ? { ...item, quantity: newQuantity, totalPrice: item.price * newQuantity } : item
+        );
+        setCartData(updatedCartData);
+      }
+    } catch (error) {
+      console.error('Update quantity failed', error);
+      toast.error("Update quantity failed: " + error.message);
+    }
   };
 
   const handleSelectItem = (productId) => {

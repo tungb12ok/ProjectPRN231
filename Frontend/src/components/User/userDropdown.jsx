@@ -111,6 +111,18 @@ export default function UserDropdown() {
                 <motion.li
                     variants={itemVariants}
                     className="bg-white p-3 text-black"
+                >
+                    <Link
+                        to="/my-orders"
+                        className={({ isActive }) => isActive ? "text-orange-500" : "text-zinc-800"}
+                    >
+                        <FontAwesomeIcon icon={faUser} className="pr-1" />
+                        My Order
+                    </Link>
+                </motion.li>
+                <motion.li
+                    variants={itemVariants}
+                    className="bg-white p-3 text-black"
                 onClick={handleLogout}
                 >
 

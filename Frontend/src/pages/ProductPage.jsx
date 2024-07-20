@@ -113,18 +113,6 @@ function ProductPage() {
 
               <div className=" text-black font-bold">Size</div>
 
-              <div className="relative p-4">
-                <div className="grid grid-cols-4 gap-2">
-                  {["XS", "S", "M", "L", "XL", "2XL"].map((size) => (
-                    <button
-                      key={size}
-                      className="bg-transparent border border-black text-black font-bold py-2 px-4 rounded"
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
-              </div>
               <div className="h-px bg-gray-300 my-5 mx-auto"></div>
               <div>
                 <div className=" text-black font-bold">Price</div>

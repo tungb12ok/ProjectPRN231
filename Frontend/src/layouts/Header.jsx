@@ -61,8 +61,8 @@ function Header() {
                             <FontAwesomeIcon icon={faMagnifyingGlass} className="items-center text-blue-500 font-medium pr-3" />
                         </div>
                         <div className="flex pr-20 items-center space-x-4">
-                            <p><FontAwesomeIcon icon={faPhone} className="pr-1 text-gray-600" />+84 338-581-571</p>
-                            <p><FontAwesomeIcon icon={faEnvelope} className="pr-1 text-gray-600" />2sportteam@gmail.com</p>
+                            <p><FontAwesomeIcon icon={faPhone} className="pr-1 text-gray-600" />+84 972-074-620</p>
+                            <p><FontAwesomeIcon icon={faEnvelope} className="pr-1 text-gray-600" />tung020802@gmail.com</p>
                         </div>
                     </div>
 
