@@ -92,8 +92,9 @@ namespace _2Sport_BE.Controllers
                     return StatusCode(500, "Failed to delete cart items.");
                 }
 
-                var orderVM = new OrderVM()
+                var orderCheckOut = new OrderCheckOut()
                 {
+                    OrderId = order.Id,
                     ShipmentDetailId = orderCM.ShipmentDetailId,
                     PaymentMethod = order.PaymentMethod.PaymentMethodName,
                     ReceivedDate = order.ReceivedDate,
@@ -105,11 +106,11 @@ namespace _2Sport_BE.Controllers
                     
                 };
 
-                var responseModel = new ResponseModel<OrderVM>
+                var responseModel = new ResponseModel<OrderCheckOut>
                 {
                     IsSuccess = true,
                     Message = "Query successfully!",
-                    Data = orderVM
+                    Data = orderCheckOut
                 };
                 return Ok(responseModel);
             }

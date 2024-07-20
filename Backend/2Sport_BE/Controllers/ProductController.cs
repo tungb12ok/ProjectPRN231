@@ -27,13 +27,13 @@ namespace _2Sport_BE.Controllers
         private readonly IWarehouseService _warehouseService;
 
         public ProductController(IProductService productService,
-                                IBrandService brandService,
-                                ICategoryService categoryService,
-                                IUnitOfWork unitOfWork,
-                                ISportService sportService,
-                                ILikeService likeService,
-                                IReviewService reviewService,
-                                IMapper mapper)
+            IBrandService brandService,
+            ICategoryService categoryService,
+            IUnitOfWork unitOfWork,
+            ISportService sportService,
+            ILikeService likeService,
+            IReviewService reviewService,
+            IMapper mapper)
         {
             _productService = productService;
             _unitOfWork = unitOfWork;
@@ -71,16 +71,16 @@ namespace _2Sport_BE.Controllers
         {
             try
             {
-                var query = await _productService.GetProducts(
-                    _ => _.Status == true,
-                    null,
+              
+                var query = await _productService.GetProducts(_ =>
+                        _.ProductName.ToLower().Contains("") &&
+                        _.Status == true,
                     "",
                     defaultSearch.currentPage,
                     defaultSearch.perPage
                 );
 
                 var products = query.ToList();
-
                 foreach (var product in products)
                 {
                     var brand = await _brandService.GetBrandById(product.BrandId);
@@ -91,9 +91,13 @@ namespace _2Sport_BE.Controllers
                     product.Sport = sport;
                     var classification = await _unitOfWork.ClassificationRepository.FindAsync(product.ClassificationId);
                     product.Classification = classification;
+                    //var warehouse = await _warehouseService.GetWarehouseByProductId(product.Id);
+                    //product.WarehouseQuantity = warehouse.FirstOrDefault()?.Quantity ?? 0;
                 }
 
-                var result = products.Select(_ => _mapper.Map<Product, ProductVM>(_)).ToList();
+                var result = query.Sort(defaultSearch.sortBy, defaultSearch.isAscending)
+                    .Select(_ => _mapper.Map<Product, ProductVM>(_))
+                    .ToList();
 
                 foreach (var product in result)
                 {
@@ -103,13 +107,14 @@ namespace _2Sport_BE.Controllers
                     product.Likes = numOfLikes;
                 }
 
-                return Ok(new { total = products.Count(), data = result });
+                return Ok(new { total = result.Count, data = result });
             }
             catch (Exception ex)
             {
                 return BadRequest(ex);
             }
         }
+
         [HttpGet]
         [Route("ListProductByAdmin")]
         public async Task<IActionResult> GetProductsByAdmin([FromQuery] DefaultSearch defaultSearch)
@@ -159,32 +164,40 @@ namespace _2Sport_BE.Controllers
 
         [HttpGet]
         [Route("filter-sort-products")]
-        public async Task<IActionResult> FilterSortProducts([FromQuery] DefaultSearch defaultSearch, string? size, decimal minPrice, decimal maxPrice,
-                                                        int sportId, int brandId, int categoryId, int classificationId)
+        public async Task<IActionResult> FilterSortProducts([FromQuery] DefaultSearch defaultSearch, string? size,
+            decimal minPrice, decimal maxPrice,
+            int sportId, int brandId, int categoryId, int classificationId)
         {
             try
             {
-                var query = await _productService.GetProducts(_ => _.Status == true, "", defaultSearch.currentPage, defaultSearch.perPage);
+                var query = await _productService.GetProducts(_ => _.Status == true, "", defaultSearch.currentPage,
+                    defaultSearch.perPage);
                 if (sportId != 0)
                 {
                     query = query.Where(_ => _.SportId == sportId);
                 }
+
                 if (brandId != 0)
                 {
                     query = query.Where(_ => _.BrandId == brandId);
                 }
+
                 if (categoryId != 0)
                 {
                     query = query.Where(_ => _.CategoryId == categoryId);
                 }
+
                 if (classificationId != 0)
                 {
                     query = query.Where(_ => _.ClassificationId == classificationId);
                 }
+
                 if (!String.IsNullOrEmpty(size))
                 {
-                    query = query.Where(_ => _.Size.ToLower().Equals(size.ToLower()) || _.Size.ToLower().Equals("free"));
+                    query = query.Where(_ =>
+                        _.Size.ToLower().Equals(size.ToLower()) || _.Size.ToLower().Equals("free"));
                 }
+
                 if (minPrice >= 0 && maxPrice > 0)
                 {
                     if (minPrice < maxPrice)
@@ -211,8 +224,8 @@ namespace _2Sport_BE.Controllers
                 }
 
                 var result = query.Sort(defaultSearch.sortBy, defaultSearch.isAscending)
-                                  .Select(_ => _mapper.Map<Product, ProductVM>(_))
-                                  .ToList();
+                    .Select(_ => _mapper.Map<Product, ProductVM>(_))
+                    .ToList();
 
                 foreach (var product in result)
                 {
@@ -229,34 +242,43 @@ namespace _2Sport_BE.Controllers
                 return BadRequest(ex);
             }
         }
+
         [HttpGet]
         [Route("filter-sort-products-manager")]
-        public async Task<IActionResult> FilterSortProductsManager([FromQuery] DefaultSearch defaultSearch, string? size, decimal minPrice, decimal maxPrice,
-                                                        int sportId, int brandId, int categoryId, int classificationId)
+        public async Task<IActionResult> FilterSortProductsManager([FromQuery] DefaultSearch defaultSearch,
+            string? size, decimal minPrice, decimal maxPrice,
+            int sportId, int brandId, int categoryId, int classificationId)
         {
             try
             {
-                var query = await _productService.GetProducts(null, "", defaultSearch.currentPage, defaultSearch.perPage);
+                var query = await _productService.GetProducts(null, "", defaultSearch.currentPage,
+                    defaultSearch.perPage);
                 if (sportId != 0)
                 {
                     query = query.Where(_ => _.SportId == sportId);
                 }
+
                 if (brandId != 0)
                 {
                     query = query.Where(_ => _.BrandId == brandId);
                 }
+
                 if (categoryId != 0)
                 {
                     query = query.Where(_ => _.CategoryId == categoryId);
                 }
+
                 if (classificationId != 0)
                 {
                     query = query.Where(_ => _.ClassificationId == classificationId);
                 }
+
                 if (!String.IsNullOrEmpty(size))
                 {
-                    query = query.Where(_ => _.Size.ToLower().Equals(size.ToLower()) || _.Size.ToLower().Equals("free"));
+                    query = query.Where(_ =>
+                        _.Size.ToLower().Equals(size.ToLower()) || _.Size.ToLower().Equals("free"));
                 }
+
                 if (minPrice >= 0 && maxPrice > 0)
                 {
                     if (minPrice < maxPrice)
@@ -280,12 +302,12 @@ namespace _2Sport_BE.Controllers
                     product.Sport = sport;
                     var classification = await _unitOfWork.ClassificationRepository.FindAsync(product.ClassificationId);
                     product.Classification = classification;
-                    
+
                 }
 
                 var result = query.Sort(defaultSearch.sortBy, defaultSearch.isAscending)
-                                  .Select(_ => _mapper.Map<Product, ProductVM>(_))
-                                  .ToList();
+                    .Select(_ => _mapper.Map<Product, ProductVM>(_))
+                    .ToList();
 
                 foreach (var product in result)
                 {
@@ -347,14 +369,17 @@ namespace _2Sport_BE.Controllers
 
         [HttpGet]
         [Route("search-products")]
-        public async Task<IActionResult> SearchProducts([FromQuery] string keywords, [FromQuery] DefaultSearch defaultSearch)
+        public async Task<IActionResult> SearchProducts([FromQuery] string keywords,
+            [FromQuery] DefaultSearch defaultSearch)
         {
             try
             {
                 var query = await _productService.GetProducts(_ => _.Status == true &&
-                                                                (_.ProductName.ToLower().Contains(keywords.ToLower()) ||
-                                                                _.ProductCode.ToLower().Contains(keywords.ToLower()))
-                                                                , "", defaultSearch.currentPage, defaultSearch.perPage);
+                                                                   (_.ProductName.ToLower()
+                                                                        .Contains(keywords.ToLower()) ||
+                                                                    _.ProductCode.ToLower()
+                                                                        .Contains(keywords.ToLower()))
+                    , "", defaultSearch.currentPage, defaultSearch.perPage);
 
                 var products = query.ToList();
                 foreach (var product in products)
@@ -370,8 +395,8 @@ namespace _2Sport_BE.Controllers
                 }
 
                 var result = query.Sort(defaultSearch.sortBy, defaultSearch.isAscending)
-                                  .Select(_ => _mapper.Map<Product, ProductVM>(_))
-                                  .ToList();
+                    .Select(_ => _mapper.Map<Product, ProductVM>(_))
+                    .ToList();
 
                 foreach (var product in result)
                 {
@@ -388,19 +413,25 @@ namespace _2Sport_BE.Controllers
                 return BadRequest(ex);
             }
         }
+
         [HttpGet]
         [Route("SearchProductsByAdmin")]
-        public async Task<IActionResult> SearchProductsByAdmin([FromQuery] string keywords, [FromQuery] DefaultSearch defaultSearch)
+        public async Task<IActionResult> SearchProductsByAdmin([FromQuery] string? keywords,
+            [FromQuery] DefaultSearch defaultSearch)
         {
             try
             {
+                if (keywords == null)
+                {
+                    keywords = "";
+                }
                 var query = await _productService.GetProducts(_ =>
                         _.ProductName.ToLower().Contains(keywords.ToLower()) ||
                         _.ProductCode.ToLower().Contains(keywords.ToLower()),
-                         "",
-                        defaultSearch.currentPage,
-                        defaultSearch.perPage
-                    );
+                    "",
+                    defaultSearch.currentPage,
+                    defaultSearch.perPage
+                );
 
                 var products = query.ToList();
                 foreach (var product in products)
@@ -418,8 +449,8 @@ namespace _2Sport_BE.Controllers
                 }
 
                 var result = query.Sort(defaultSearch.sortBy, defaultSearch.isAscending)
-                                  .Select(_ => _mapper.Map<Product, ProductVM>(_))
-                                  .ToList();
+                    .Select(_ => _mapper.Map<Product, ProductVM>(_))
+                    .ToList();
 
                 foreach (var product in result)
                 {
@@ -492,16 +523,17 @@ namespace _2Sport_BE.Controllers
 
         }
 
-        [HttpDelete]
-        [Route("delete-product/{id}")]
-        public async Task<IActionResult> DeleteProduct(int id)
+        [HttpPost]
+        [Route("update-product-status")]
+        public async Task<IActionResult> UpdateStatusProduct(int id, bool status)
         {
             try
             {
-                await _productService.DeleteProductById(id);
-                _unitOfWork.Save();
-                return Ok("Delete product successfully!");
+                await _productService.UpateStatusProduct(id, status);
+                return Ok("InActive product successfully!");
+
             }
+        
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);

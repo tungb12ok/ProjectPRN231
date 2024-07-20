@@ -83,7 +83,7 @@ namespace _2Sport_BE.Controllers
             int userId = GetCurrentUserIdFromToken();
             try
             {
-                var order = _userOrderService.GetUserOrders(userId);
+                var order = _userOrderService.GetUserOrders(userId).OrderByDescending(x => x.OrderDate);
                 return Ok(order);
             }
             catch(Exception ex) {
