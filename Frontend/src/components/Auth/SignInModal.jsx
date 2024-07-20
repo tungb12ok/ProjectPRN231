@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash, faUser } from '@fortawesome/free-solid-svg-icons';
 import { login, selectUser } from '../../redux/slices/authSlice';
 import UserDropdown from '../User/userDropdown';
-import SignUpModal from './SignUpModal';
+import SignUpModal from './SignUpModal.jsx';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { authenticateUser } from '../../services/authService';
 import ForgotPasswordModal from './ForgotPasswordModal';
 import LoginGoogle from './LoginGoogle';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignInModal() {
   const dispatch = useDispatch();
@@ -24,6 +24,7 @@ export default function SignInModal() {
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
+  const navigate = useNavigate(); // Ensure navigate is defined here
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -31,10 +32,22 @@ export default function SignInModal() {
 
   const onSubmit = async (data) => {
     try {
-      await authenticateUser(dispatch, data);
+      const response = await authenticateUser(dispatch, data);
       setIsSignInOpen(false);
-      console.log('Login successful!');
       toast.success('Login successful!');
+      console.log("user", response);
+
+      if (response && response.role) {
+        if (response.role === 'Admin' || response.role === 'Manager') {
+          console.log("navigate to dashboard");
+          navigate('/dashboard');
+        } else {
+          console.log("navigate to home");
+          navigate('/');
+        }
+      } else {
+        console.error("User role is undefined");
+      }
     } catch (error) {
       toast.error('Login failed!');
     }
@@ -135,7 +148,7 @@ export default function SignInModal() {
                             />
                           </svg>
                         </div>
-                        <span className="ml-4">Sign In with GitHub</span>
+                        <span className="ml-4">Sign Up</span>
                       </button>
                     </div>
 

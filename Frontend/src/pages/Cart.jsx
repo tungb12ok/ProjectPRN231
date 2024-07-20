@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { selectCartItems, removeFromCart, decreaseQuantity, addCart } from '../redux/slices/cartSlice';
@@ -13,11 +13,17 @@ const Cart = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    console.log("Cart Items:", cartItems);
+  }, [cartItems]);
+
   const handleRemoveFromCart = (productId) => {
+    console.log(`Removing product with ID: ${productId}`);
     dispatch(removeFromCart(productId));
   };
 
   const handleQuantityChange = (product, change) => {
+    console.log(`Changing quantity for product with ID: ${product.id}, Change: ${change}`);
     if (change === 'increase') {
       dispatch(addCart(product));
     } else if (change === 'decrease') {
@@ -26,6 +32,7 @@ const Cart = () => {
   };
 
   const handleSelectItem = (productId) => {
+    console.log(`Toggling selection for product with ID: ${productId}`);
     setSelectedItems(prevSelected =>
       prevSelected.includes(productId)
         ? prevSelected.filter(id => id !== productId)
@@ -34,6 +41,7 @@ const Cart = () => {
   };
 
   const handleSelectAll = () => {
+    console.log("Toggling select all items");
     if (selectedItems.length === cartItems.length) {
       setSelectedItems([]);
     } else {
@@ -48,12 +56,14 @@ const Cart = () => {
   }, 0);
 
   const handleCheckout = () => {
+    console.log("Initiating checkout with selected items:", selectedItems);
     if (selectedItems.length === 0) {
       toast.error("Please select at least one item to checkout.");
       return;
     }
 
     const selectedProducts = cartItems.filter(item => selectedItems.includes(item.id));
+    console.log("Selected products for checkout:", selectedProducts);
 
     navigate('/checkout', { state: { selectedProducts } });
   };
@@ -71,7 +81,7 @@ const Cart = () => {
         <div className="w-full">
           <div className="bg-zinc-100 rounded-lg overflow-hidden shadow-lg">
             <div className="flex items-center justify-between p-4 bg-zinc-300">
-              <div className="w-1/12 text-center ">
+              <div className="w-1/12 text-center">
                 <input
                   type="checkbox"
                   checked={selectedItems.length === cartItems.length}
@@ -116,14 +126,14 @@ const Cart = () => {
                     +
                   </button>
                 </div>
-                <div className="w-1/12 text-center">{item.price} VND</div>
-                <div className="w-2/12 text-center">{item.price * item.quantity} VND</div>
+                <div className="w-1/12 text-center">{parseFloat(item.price) || 0} VND</div>
+                <div className="w-2/12 text-center">{(parseFloat(item.price) || 0) * (item.quantity || 1)} VND</div>
                 <div className="w-1/12 text-center">
                   <button
                     className="text-red-500"
                     onClick={() => handleRemoveFromCart(item.id)}
                   >
-                   <FontAwesomeIcon icon={faTrash} />
+                    <FontAwesomeIcon icon={faTrash} />
                   </button>
                 </div>
               </div>
@@ -131,7 +141,7 @@ const Cart = () => {
           </div>
           <div className="flex justify-between items-center mt-4">
             <Link to="/product" className="text-blue-500 flex items-center font-poppins">
-            <FontAwesomeIcon className="pr-2" icon={faArrowLeft} /> Continue Shopping
+              <FontAwesomeIcon className="pr-2" icon={faArrowLeft} /> Continue Shopping
             </Link>
             <div className="text-right">
               <p className="text-lg font-semibold">Total ({selectedItems.length} items): {totalPrice} VND</p>

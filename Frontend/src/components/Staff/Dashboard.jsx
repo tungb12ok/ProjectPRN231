@@ -1,307 +1,144 @@
-// src/pages/Dashboard.jsx
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import { getTotalOrder, getTotalRevenue, getListOrder } from '../../api/apiDashboard';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { toast } from 'react-toastify';
 import {
   Card,
-  Breadcrumbs,
-  CardBody,
   Typography,
-  Avatar,
-  Checkbox,
 } from "@material-tailwind/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEllipsisVertical,
-  faArrowUp,
-  faCalendar,
   faBagShopping
 } from "@fortawesome/free-solid-svg-icons";
-import { fetchOrders } from "../../services/DashboardService";
 import HeaderStaff from "./HeaderStaff";
 import SidebarStaff from "./SidebarStaff";
 
+const Dashboard = () => {
+  const [totalOrder, setTotalOrder] = useState(0);
+  const [totalRevenue, setTotalRevenue] = useState(0);
+  const [orderData, setOrderData] = useState([]);
+  const [startDate, setStartDate] = useState(new Date('1753-01-01'));
+  const [endDate, setEndDate] = useState(new Date('2500-12-31'));
 
-export default function Dashboard() {
-  const [orders, setOrders] = useState([]);
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [totalAmount, setTotalAmount] = useState(0);
-  const [totalOrders, setTotalOrders] = useState(0);
-  const [activeAmount, setActiveAmount] = useState(0);
-  const [completedAmount, setCompletedAmount] = useState(0);
-  const [activeLength, setActiveLength] = useState(0);
-  const [completedLength, setCompletedLength] = useState(0);
+  useEffect(() => {
+    fetchData();
+  }, [startDate, endDate]);
+
+  const fetchData = async () => {
+    await fetchTotalOrder();
+    await fetchTotalRevenue();
+    await fetchListOrder();
+  };
+
+  const fetchTotalOrder = async () => {
+    try {
+      const response = await getTotalOrder(startDate, endDate);
+      setTotalOrder(response.data.totalOrder);
+    } catch (error) {
+      toast.error("Error fetching total order data");
+    }
+  };
+
+  const fetchTotalRevenue = async () => {
+    try {
+      const response = await getTotalRevenue(startDate, endDate);
+      setTotalRevenue(response.data.totalRevenue);
+    } catch (error) {
+      toast.error("Error fetching total revenue data");
+    }
+  };
+
+  const fetchListOrder = async () => {
+    try {
+      const response = await getListOrder(startDate, endDate);
+      setOrderData(response.data.orders.$values.map(order => ({
+        date: new Date(order.date).toLocaleDateString(),
+        totalPrice: order.totalPrice
+      })));
+    } catch (error) {
+      toast.error("Error fetching list order data");
+    }
+  };
 
   const formatPrice = (value) => {
     return new Intl.NumberFormat("en-US", { minimumFractionDigits: 0 }).format(value) + " VND";
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const ordersData = await fetchOrders();
-        setOrders(ordersData);
-        console.log("ordersData", ordersData);
-        // Calculate totals
-        const totalOrdersCount = ordersData.length;
-        const totalAmountSum = ordersData.reduce((acc, order) => acc + parseFloat(order.amount), 0);
-        setTotalOrders(totalOrdersCount);
-        setTotalAmount(totalAmountSum);
-      } catch (error) {
-        console.log(error);
-        setOrders([]);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const onSelectChange = (selectedKey) => {
-    setSelectedRowKeys((prevSelectedRowKeys) =>
-      prevSelectedRowKeys.includes(selectedKey)
-        ? prevSelectedRowKeys.filter((key) => key !== selectedKey)
-        : [...prevSelectedRowKeys, selectedKey]
-    );
-  };
-
   return (
-    <>
-      <HeaderStaff />
-      <div className="flex">
-        <div className="w-2/12">
-          <SidebarStaff />
-        </div>
-        <div className="flex-grow p-4 w-10/12">
-          <h2 className="text-2xl font-bold mx-10 mt-4">Dashboard</h2>
-          <div className="flex justify-between items-center mx-10 my-4">
-            <Breadcrumbs className="flex-grow">
-              <a href="#" className="opacity-60">
-                Home
-              </a>
-              <a href="#">Dashboard</a>
-            </Breadcrumbs>
-          </div>
-
-          <div className="flex justify-around items-center space-x-4 mx-10">
-            <Card className="shadow-md p-4 w-full">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="text-lg font-semibold text-black">
-                  Total Orders <p className="text-lg">({totalOrders})</p>
-                </h3>
-                <FontAwesomeIcon icon={faEllipsisVertical} />
-              </div>
-              <div className="flex items-center justify-start mb-2">
-                <FontAwesomeIcon icon={faBagShopping} className="text-orange-500 pr-2" />
-                <p className="text-xl font-bold">{formatPrice(totalAmount.toFixed(2))}</p>
-              </div>
-            </Card>
-            <Card className="shadow-md p-4 w-full">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="text-lg font-semibold text-black">Active Orders:</h3>
-                <FontAwesomeIcon icon={faEllipsisVertical} />
-              </div>
-              <div className="flex items-center justify-start mb-2">
-                <div className="flex items-center justify-start mb-2">
-                  <FontAwesomeIcon icon={faBagShopping} className="text-orange-500 pr-2" />
-                  <p className="text-xl font-bold"></p>
-                </div>
-                <div className="flex justify-between items-center w-full">
-                  <p className="text-xl font-bold"></p>
-                </div>
-              </div>
-            </Card>
-            <Card className="shadow-md p-4 w-full">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="text-lg font-semibold text-black">
-                  Completed Orders:
-                </h3>
-                <FontAwesomeIcon icon={faEllipsisVertical} />
-              </div>
-              <div className="flex items-center justify-start mb-2">
-                <div className="flex items-center justify-start mb-2">
-                  <FontAwesomeIcon icon={faBagShopping} className="text-orange-500 pr-2" />
-                  <p className="text-xl font-bold"></p>
-                </div>
-                <div className="flex justify-between items-center w-full">
-                  <p className="text-xl font-bold"></p>
-                </div>
-              </div>
-            </Card>
-            <Card className="shadow-md p-4 w-full">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="text-lg font-semibold text-black">Return Orders:</h3>
-                <FontAwesomeIcon icon={faEllipsisVertical} />
-              </div>
-              <div className="flex items-center justify-start mb-2">
-                <div className="flex items-center justify-start mb-2">
-                  <FontAwesomeIcon icon={faBagShopping} className="text-orange-500 pr-2" />
-                  <p className="text-xl font-bold"></p>
-                </div>
-                <div className="flex justify-between items-center w-full">
-                  <p className="text-xl font-bold"></p>
-                </div>
-              </div>
-            </Card>
-          </div>
-
-          <Card className="h-full w-full mx-10 my-10">
-            <Typography variant="h6" color="black" className="mx-10 mt-4 text-2xl">
-              Recent Orders
-            </Typography>
-
-            <CardBody className="overflow-scroll px-0">
-              <table className="w-full min-w-max table-auto text-left">
-                <thead>
-                  <tr>
-                    <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
-                      <Checkbox
-                        color="blue"
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setSelectedRowKeys(orders.map((row) => row.id));
-                          } else {
-                            setSelectedRowKeys([]);
-                          }
-                        }}
-                        checked={selectedRowKeys.length === orders.length}
-                        indeterminate={
-                          selectedRowKeys.length > 0 &&
-                          selectedRowKeys.length < orders.length
-                        }
-                      />
-                    </th>
-                    <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
-                      <Typography
-                        variant="large"
-                        color="blue-gray"
-                        className="font-normal leading-none opacity-70"
-                      >
-                        Order ID
-                      </Typography>
-                    </th>
-                    <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
-                      <Typography
-                        variant="large"
-                        color="blue-gray"
-                        className="font-normal leading-none opacity-70"
-                      >
-                        Date
-                      </Typography>
-                    </th>
-                    <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
-                      <Typography
-                        variant="large"
-                        color="blue-gray"
-                        className="font-normal leading-none opacity-70"
-                      >
-                        Customer
-                      </Typography>
-                    </th>
-                    <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
-                      <Typography
-                        variant="large"
-                        color="blue-gray"
-                        className="font-normal leading-none opacity-70"
-                      >
-                        Status
-                      </Typography>
-                    </th>
-                    <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
-                      <Typography
-                        variant="large"
-                        color="blue-gray"
-                        className="font-normal leading-none opacity-70"
-                      >
-                        Total Price
-                      </Typography>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders.map((order, index) => {
-                    const isLast = index === orders.length - 1;
-                    const classes = isLast
-                      ? "p-4"
-                      : "p-4 border-b border-blue-gray-50";
-                    const isSelected = selectedRowKeys.includes(order.id);
-
-                    return (
-                      <tr
-                        key={order.id}
-                        className={isSelected ? "bg-blue-100" : ""}
-                      >
-                        <td className={classes}>
-                          <Checkbox
-                            color="blue"
-                            checked={isSelected}
-                            onChange={() => onSelectChange(order.id)}
-                          />
-                        </td>
-                        <td className={classes}>
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                            {order.orderCode}
-                          </Typography>
-                        </td>
-                        <td className={classes}>
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                            {new Date(order.createDate).toLocaleDateString()}
-                          </Typography>
-                        </td>
-                        <td className={classes}>
-                          <div className="flex items-center">
-                            <Typography
-                              variant="small"
-                              color="blue-gray"
-                              className="font-normal"
-                            >
-                              {order.customerName}
-                            </Typography>
-                          </div>
-                        </td>
-                        <td className={classes}>
-                          <div className="flex items-center">
-                            <span
-                              className={`inline-block w-2 h-2 mr-2 rounded-full ${order.status === "Order Confirmation"
-                                  ? "bg-green-500"
-                                  : order.status === "Canceled"
-                                    ? "bg-red-500"
-                                    : "bg-gray-500"
-                                }`}
-                            ></span>
-                            <Typography
-                              variant="small"
-                              color="blue-gray"
-                              className="font-normal"
-                            >
-                              {order.status}
-                            </Typography>
-                          </div>
-                        </td>
-                        <td className={classes}>
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                            {formatPrice(order.amount)}
-                          </Typography>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </CardBody>
-          </Card>
-        </div>
+    <div className="flex h-screen bg-gray-100">
+      <div className="w-2/12 h-full fixed">
+        <SidebarStaff />
       </div>
-    </>
+      <div className="flex flex-col w-10/12 ml-auto">
+        <HeaderStaff />
+        <main className="flex-1 p-4 mt-16 ml-3">
+          <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
+          <div className="date-picker-container flex space-x-6 mb-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Start Date: </label>
+              <DatePicker
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                dateFormat="yyyy-MM-dd"
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">End Date: </label>
+              <DatePicker
+                selected={endDate}
+                onChange={(date) => setEndDate(date)}
+                dateFormat="yyyy-MM-dd"
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
+              />
+            </div>
+          </div>
+          <div className="summary grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+            <Card className="shadow-lg p-6 bg-white rounded-lg">
+              <div className="flex justify-between items-center mb-4">
+                <Typography className="text-xl font-semibold text-gray-900">Total Orders</Typography>
+                <FontAwesomeIcon icon={faEllipsisVertical} />
+              </div>
+              <div className="flex items-center">
+                <FontAwesomeIcon icon={faBagShopping} className="text-orange-500 pr-4 text-2xl" />
+                <Typography className="text-2xl font-bold">{totalOrder}</Typography>
+              </div>
+            </Card>
+            <Card className="shadow-lg p-6 bg-white rounded-lg">
+              <div className="flex justify-between items-center mb-4">
+                <Typography className="text-xl font-semibold text-gray-900">Total Revenue</Typography>
+                <FontAwesomeIcon icon={faEllipsisVertical} />
+              </div>
+              <div className="flex items-center">
+                <FontAwesomeIcon icon={faBagShopping} className="text-orange-500 pr-4 text-2xl" />
+                <Typography className="text-2xl font-bold">{formatPrice(totalRevenue)}</Typography>
+              </div>
+            </Card>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <BarChart
+              width={800}
+              height={400}
+              data={orderData}
+              margin={{
+                top: 20, right: 30, left: 20, bottom: 20,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="totalPrice" fill="#8884d8" />
+            </BarChart>
+          </div>
+        </main>
+      </div>
+    </div>
   );
-}
+};
 
+export default Dashboard;

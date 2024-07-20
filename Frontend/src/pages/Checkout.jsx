@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@material-tailwind/react";
 import DeliveryAddress from "../components/Payment/DeliveryAddress";
 import PaymentMethod from "../components/Payment/PaymentMethod";
@@ -7,9 +7,12 @@ import OrderSuccess from "../components/Payment/OrderSuccess";
 import { checkout } from "../services/paymentServices";
 import { useSelector } from "react-redux";
 import { selectedShipment } from "../redux/slices/shipmentSlice";
+import { v4 as uuidv4 } from 'uuid';
+import { checkoutOrder } from "../api/apiPayment";
 
 const Checkout = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const shipment = useSelector(selectedShipment);
   const { selectedProducts } = location.state || { selectedProducts: [] };
   const [distance, setDistance] = useState(null);
@@ -37,7 +40,7 @@ const Checkout = () => {
     try {
       const token = localStorage.getItem("token");
       const orderMethodId = selectedOption;
-
+      shipment.id = 1;
       const data = {
         transportFee: transportFee,
         receivedDate: new Date().toISOString(),
@@ -49,12 +52,18 @@ const Checkout = () => {
         shipmentDetailId: shipment.id,
       };
 
-      const response = await checkout(token, orderMethodId, data);
-
       if (orderMethodId === "1") {
+        // Create order for Cash on Delivery
+        await checkoutOrder(token, 1, data);
         setOrderSuccess(true);
-      } else if (orderMethodId === "2" && response.data.paymentLink) {
-        window.open(response.data.paymentLink, "_blank");
+      } else if (orderMethodId === "2") {
+        const response = await checkoutOrder(token, 4, data);
+        const qrLink = response.data.data.paymentLink; // Extract the QR link
+        const orderId = response.data.data.orderId; // Extract the Order ID
+        console.log(qrLink);
+        // Use navigate instead of history.push to redirect to the payment page
+        navigate(`/payment/${orderId}?qrLink=${qrLink}`);
+
       }
     } catch (error) {
       console.error("Error during checkout:", error);
@@ -74,7 +83,6 @@ const Checkout = () => {
   };
 
   const transportFee = 30000;
-    // distance !== null ? calculateTransportFee(distance) : "Calculating...";
 
   if (orderSuccess) {
     return <OrderSuccess orderCode={orderCode} />;
